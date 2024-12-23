@@ -155,9 +155,23 @@
 
 <script>
 
-    if (window.Telegram && window.Telegram.WebApp) {
-            // Access the initDataUnsafe property
-            const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+    // if (window.Telegram && window.Telegram.WebApp) {
+    //         // Access the initDataUnsafe property
+    //         const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+    //         const user = initDataUnsafe.user;
+    //         const userId = user ? user.id : "";
+
+    //         if (userId) {
+    //             // Set the user_id hidden input value
+    //             document.getElementById('user_id').value = userId;
+    //         } else {
+    //             console.error('User ID not available');
+    //         }
+    //     } else {
+    //         console.error('Telegram Web App is not initialized');
+    //     }
+
+        const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
             const user = initDataUnsafe.user;
             const userId = user ? user.id : "";
 
@@ -167,9 +181,6 @@
             } else {
                 console.error('User ID not available');
             }
-        } else {
-            console.error('Telegram Web App is not initialized');
-        }
         const status = "{{ status }}";
         console.log(status);
         // This will get the value from Django context
