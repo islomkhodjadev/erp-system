@@ -203,7 +203,7 @@ function updateCode() {
 
 function fetchPlintusComponents(plintusCode) {
     console.log(plintusCode);
-    const apiUrl = `/get_plintus_component/${plintusCode.value}/`; // Replace with your actual API endpoint
+    const apiUrl = `erp/get_plintus_component/${plintusCode.value}/`; // Replace with your actual API endpoint
 
     fetch(apiUrl)
       .then((response) => {

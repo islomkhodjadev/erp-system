@@ -144,7 +144,7 @@ def process_order(form, language="ru"):
         zaglushka_levaya = form.cleaned_data['zaglushka_levaya']
         zaglushka_pravaya = form.cleaned_data['zaglushka_pravaya']
         soedinitel = form.cleaned_data['soedinitel']
-        print(user_id)
+        
         # Get the selected plintus
         selected_plintus = Plintus.objects.get(code=plintus_code)
         components = selected_plintus.components.all()
@@ -163,7 +163,7 @@ def process_order(form, language="ru"):
                 errors[component.type] = translate(language, "not_enough_stock", available=available_component_stock)
 
         if errors:
-            print(errors)
+            
             return {"status": "error", "errors": errors}
 
         # Calculate the total price for the plintus and components
