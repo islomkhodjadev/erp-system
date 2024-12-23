@@ -21,10 +21,11 @@ def order_view(request):
         form = OrderForm(request.POST)
         if form.is_valid():
             # Process the order and get the result
-            data = process_order(form)
+            data = process_order(form, "uz")
             
             if data['status'] == 'success':
                 status = True
+                
                 message = data['message']  # Assuming success message from data
 
                 # Send a success message to Telegram user
@@ -36,13 +37,14 @@ def order_view(request):
                     
                     # Send a success message
                     send_message_to_user(telegram_id, message)
+                    status = True
                 except Profile.DoesNotExist:
                     # Handle the case where the user doesn't have a Telegram ID
                     print("Telegram ID not found for user.")
             
             else:
                 status = False
-                message = data['message']  # Assuming error message from data
+                message = "error occured"  # Assuming error message from data
 
                 # Optionally, send an error message to Telegram
                 try:

@@ -159,7 +159,7 @@ if (window.Telegram && window.Telegram.WebApp) {
         // Access the initDataUnsafe property
         const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
         const user = initDataUnsafe.user;
-        const userId = user ? user.id : "null";
+        const userId = user ? user.id : "";
 
         if (userId) {
             // Set the user_id hidden input value

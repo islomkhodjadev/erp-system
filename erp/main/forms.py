@@ -144,11 +144,11 @@ def process_order(form, language="ru"):
         zaglushka_levaya = form.cleaned_data['zaglushka_levaya']
         zaglushka_pravaya = form.cleaned_data['zaglushka_pravaya']
         soedinitel = form.cleaned_data['soedinitel']
-
+        print(user_id)
         # Get the selected plintus
         selected_plintus = Plintus.objects.get(code=plintus_code)
         components = selected_plintus.components.all()
-        if not user_id or Profile:
+        if not user_id:
             errors["user_id"] = "not found"
         # Check if there is enough stock of Plintus
         if number_of_plintus > selected_plintus.count_in_packs:
