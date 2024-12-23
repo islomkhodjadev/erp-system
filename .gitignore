@@ -1,5 +1,8 @@
+
 .env
 venv
 db.sqlite3
 __pycache__
 migrations
+nohup.txt
+nohup.out

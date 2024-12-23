@@ -8,7 +8,7 @@ def generate_buttons(language):
             [
                 KeyboardButton(
                     text=translations[language]["order_form"],
-                    web_app=WebAppInfo(url="https://ringai.uz/erp/index.html")
+                    web_app=WebAppInfo(url="https://ringai.uz/erp/order/")
                 ),
                 KeyboardButton(text=translations[language]["debts"])
             ],
