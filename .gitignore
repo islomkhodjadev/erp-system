@@ -6,3 +6,5 @@ __pycache__
 migrations
 nohup.txt
 nohup.out
+static
+media
