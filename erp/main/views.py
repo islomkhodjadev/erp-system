@@ -40,7 +40,7 @@ def order_view(request):
                     status = True
                 except Profile.DoesNotExist:
                     # Handle the case where the user doesn't have a Telegram ID
-                    print("Telegram ID not found for user.")
+                    return ("Telegram ID not found for user.")
             
             else:
                 status = False
@@ -55,7 +55,7 @@ def order_view(request):
                     # Send an error message
                     send_message_to_user(telegram_id, message)
                 except Profile.DoesNotExist:
-                    print("Telegram ID not found for user.")
+                    return ("Telegram ID not found for user.")
         else:
             status = False
             message = 'Form is not valid'

@@ -22,7 +22,6 @@ def extract_process_and_combine_sheets(excel_file, sheet_names):
         # Extract data from sheets
         for sheet_name in sheet_names:
             if sheet_name not in workbook.sheetnames:
-                print(f"Warning: Sheet '{sheet_name}' not found. Skipping.")
                 continue
 
             # Read the sheet
@@ -39,7 +38,6 @@ def extract_process_and_combine_sheets(excel_file, sheet_names):
                 combined_data.append(df)
 
         if not combined_data:
-            print("No data to combine. Ensure sheets have valid data.")
             return pd.DataFrame()  # Return an empty DataFrame if no valid data
 
         # Combine all DataFrames
@@ -97,10 +95,8 @@ def extract_process_and_combine_sheets(excel_file, sheet_names):
         return final_df
 
     except FileNotFoundError:
-        print(f"Error: File '{excel_file}' not found.")
         return pd.DataFrame()  # Return an empty DataFrame in case of error
     except Exception as e:
-        print(f"An error occurred: {e}")
         return pd.DataFrame()  # Return an empty DataFrame in case of error
 
 
@@ -133,6 +129,6 @@ def send_message_to_user(user_id, message):
     response = requests.post(url, data=data)
     
     if response.status_code != 200:
-        print(f"Failed to send message. Status code: {response.status_code}")
+        return f"Failed to send message. Status code: {response.status_code}"
     else:
-        print(f"Message sent to user {user_id}")
+        return f"Message sent to user {user_id}"
