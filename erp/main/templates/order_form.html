@@ -170,12 +170,13 @@
         } else {
             console.error('Telegram Web App is not initialized');
         }
-        const status = "{{ status }}";  // This will get the value from Django context
-            if (status === 'true') {
+        const status = "{{ status }}";
+        console.log(status);
+        // This will get the value from Django context
+            if (status === 'true' || status == "True") {
                 // If status is true (order is successful), close the Telegram Web App
-                if (window.Telegram && window.Telegram.WebApp) {
-                    Telegram.WebApp.close();
-                }
+                window.Telegram.WebApp.close();
+                
             }
             
      // Global variable to store the selected Plintus and its components
