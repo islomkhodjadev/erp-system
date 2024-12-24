@@ -11,13 +11,13 @@ from aiogram.filters import  and_f
 import inlines
 
 handlers = Router(name=__name__)
-
+import models
 
 # Handler for order form button.in_(both Russian and Uzbek
 @handlers.message(and_f(Registered(), CheckCommand("order_form")))
 async def cmd_order_form_button(message: types.Message):
 
-    await message.reply("📋 *Plintus buyurtma shakli:* \nLink orqali murojaat qiling: [Buyurtma berish](https://example.com)")
+    await message.reply("order", reply_markup=inlines.generate_open_order_button(await models.get_language(message.from_user.id)))
 
 
 # Handle contacts commanddebt

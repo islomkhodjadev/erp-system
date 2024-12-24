@@ -3,132 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Форма заказа Плинтуса</title>
+    <title>{{order_plintus_form}}</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
+       body {
+    font-family: Arial, sans-serif;
+    background-color: var(--tg-theme-bg-color, #f4f4f9);
+    color: var(--tg-theme-text-color, #000000);
+    margin: 0;
+    padding: 20px;
+}
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        .order-form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-        }
+.order-form {
+    background-color: var(--tg-theme-secondary-bg-color, #ffffff);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+}
 
-        .order-form label {
-            display: block;
-            margin: 10px 0 5px;
-        }
+.order-form label {
+    display: block;
+    margin: 10px 0 5px;
+    color: var(--tg-theme-hint-color, #666666);
+}
 
-        .order-form input,
-        .order-form select {
-            width: 120px;
-            padding: 10px;
-            margin: 5px 0 15px;
-            border-radius: 5px;
-            text-align: center;
-            box-sizing: border-box;
-            font-size: 18px;
-            border: 1px solid #ccc;
-        }
+.order-form input,
+.order-form select {
+    width: 120px;
+    padding: 10px;
+    margin: 5px 0 15px;
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box;
+    font-size: 18px;
+    border: 1px solid var(--tg-theme-hint-color, #cccccc);
+    background-color: var(--tg-theme-bg-color, #f4f4f9);
+    color: var(--tg-theme-text-color, #000000);
+}
 
-        .order-form input:focus,
-        .order-form select:focus {
-            outline: none;
-        }
+.order-form input:focus,
+.order-form select:focus {
+    outline: none;
+    border-color: var(--tg-theme-link-color, #007bff);
+}
 
-        input.valid {
-            border-color: green;
-        }
+input.valid {
+    border-color: green;
+}
 
-        input.invalid {
-            border-color: red;
-        }
+input.invalid {
+    border-color: red;
+}
 
-        button {
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 15px;
-            width: 100%;
-            box-sizing: border-box;
-        }
+button {
+    padding: 10px 20px;
+    background-color: var(--tg-theme-button-color, #28a745);
+    color: var(--tg-theme-button-text-color, #ffffff);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
 
-        button:hover {
-            background-color: #218838;
-        }
+button:hover {
+    background-color: var(--tg-theme-link-color, #218838);
+}
 
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
+button:disabled {
+    background-color: var(--tg-theme-hint-color, #cccccc);
+    cursor: not-allowed;
+}
 
-        /* Popup styling */
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
+/* Popup styling */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
 
-        .popup-content {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 80%;
-            max-width: 400px;
-        }
+.popup-content {
+    background-color: var(--tg-theme-secondary-bg-color, #ffffff);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+}
 
-        .popup select {
-            padding: 10px;
-            margin: 10px 0;
-            width: 100%;
-        }
+.popup select {
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    background-color: var(--tg-theme-bg-color, #f4f4f9);
+    color: var(--tg-theme-text-color, #000000);
+}
 
-        .popup button {
-            margin-top: 10px;
-        }
+.popup button {
+    margin-top: 10px;
+}
 
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .order-form {
-                padding: 15px;
-            }
-            button {
-                width: 100%;
-            }
-            .popup-content {
-                width: 90%;
-            }
-        }
+/* Responsive Design */
+@media (max-width: 600px) {
+    .order-form {
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    .popup-content {
+        width: 90%;
+    }
+}
+
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 </head>
 <body>
-    <h2>Форма заказа Плинтуса</h2>
+    <h2>{{order_plintus_form}}</h2>
 
     <!-- Order Form -->
     <form method="POST" class="order-form">
@@ -136,7 +146,7 @@
         {{ form }}
         <div id="codePopup" class="popup">
             <div class="popup-content">
-                <h3>Выберите код плинтуса:</h3>
+                <h3>{{choose_plintus}}:</h3>
                 <select id="codeSelect" onchange="updateCode()">
                     {% for plintus in plintus_list %}
                     <option value="{{ plintus.code }}" data-price="{{ plintus.price }}" data-stock="{{ plintus.count_in_packs }}">
@@ -144,32 +154,18 @@
                     </option>
                     {% endfor %}
                 </select>
-                <button type="button" onclick="closeCodePopup()">Закрыть</button>
+                <button type="button" onclick="closeCodePopup()">{{close}}</button>
             </div>
         </div>
-        <p>Итоговая стоимость: <span id="totalPrice">{{ total_price }}</span> $</p>
+        <p>{{total_price}}: <span id="totalPrice">0.0</span> $</p>
 
-        <input type="submit" value="Submit">
-        <button type="reset">Очистить</button>
+        <input type="submit" value="{{submit}}">
+        <button type="reset">{{clean}}</button>
     </form>
 
 <script>
 
-    // if (window.Telegram && window.Telegram.WebApp) {
-    //         // Access the initDataUnsafe property
-    //         const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
-    //         const user = initDataUnsafe.user;
-    //         const userId = user ? user.id : "";
-
-    //         if (userId) {
-    //             // Set the user_id hidden input value
-    //             document.getElementById('user_id').value = userId;
-    //         } else {
-    //             console.error('User ID not available');
-    //         }
-    //     } else {
-    //         console.error('Telegram Web App is not initialized');
-    //     }
+    
 
         const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
             const user = initDataUnsafe.user;

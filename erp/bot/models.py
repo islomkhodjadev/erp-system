@@ -133,3 +133,15 @@ def change_language(telegram_id, language):
     except ObjectDoesNotExist:
         # If no profile is found with the given telegram_id
         return METHOOD_STATUS.NOTFOUND  # You can return an appropriate status message here
+
+@sync_to_async
+def get_language(telegram_id):
+    try:
+        # Try to get the Profile with the given telegram_id
+        profile = Profile.objects.get(telegram_id=str(telegram_id))
+        
+        return profile.language
+    except ObjectDoesNotExist:
+        # If no profile is found with the given telegram_id
+        return METHOOD_STATUS.NOTFOUND  # You can return an appropriate status message here
+    

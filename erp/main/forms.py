@@ -100,6 +100,7 @@ class OrderForm(forms.Form):
 # Translation dictionary where the language code is the key, and inside it we have the translated terms.
 TRANSLATIONS = {
     "ru": {
+        "order_plintus_form": "Plintus buyurtma formasi",
         "order_success": "Ваш заказ был успешно оформлен:",
         "plintus_code": "Код плинтуса:",
         "number_of_plintus": "Количество плинтусов:",
@@ -107,9 +108,14 @@ TRANSLATIONS = {
         "components": "Компоненты:",
         "total_price": "Общая стоимость (Плинтус + Компоненты):",
         "not_enough_stock": "Недостаточно товара на складе. Доступно: {available} упаковок.",
-        "form_invalid": "Форма не является действительной."
+        "form_invalid": "Форма не является действительной.",
+        "choose_plintus": "Выберите тип плинтуса",
+        "close": "Закрыть",
+        "clean": "Очистить",
+        "submit": "Отправить"
     },
     "uz": {
+        "order_plintus_form": "Форма заказа Плинтуса",
         "order_success": "Sizning buyurtmangiz muvaffaqiyatli joylandi:",
         "plintus_code": "Plyintus kodi:",
         "number_of_plintus": "Plyintuslar soni:",
@@ -117,7 +123,11 @@ TRANSLATIONS = {
         "components": "Komponentlar:",
         "total_price": "Umumiy narx (Plyintus + Komponentlar):",
         "not_enough_stock": "Omborimizda etarli miqdorda mahsulot yo'q. Mavjud: {available} qadoqlar.",
-        "form_invalid": "Forma amal qilmaydi."
+        "form_invalid": "Forma amal qilmaydi.",
+        "choose_plintus": "Plintus turini tanlang",
+        "close": "Yopish",
+        "clean": "Tozalash",
+        "submit": "Yuborish"
     }
 }
 

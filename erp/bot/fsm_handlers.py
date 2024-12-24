@@ -47,7 +47,7 @@ async def start_bot_without_login(message: Message):
 
 @fsm_handlers.message(Login.username)
 async def process_name(message: Message, state: FSMContext) -> None:
-    print("login")
+    
     if not message.text:
         await message.answer(
             text="Iltimos, foydalanuvchi nomini kiriting 🇺🇿"
@@ -72,7 +72,7 @@ async def process_name(message: Message, state: FSMContext) -> None:
 
 @fsm_handlers.message(Login.password)
 async def process_password(message: Message, state: FSMContext) -> None:
-    print("password")
+    
     if not message.text:
         await message.answer(
             "Iltimos, parolingizni kiriting 🔑"
@@ -82,7 +82,7 @@ async def process_password(message: Message, state: FSMContext) -> None:
         await state.update_data(password=message.text)
         
         data = await state.get_data()
-        print(data)
+        
         
         status = await authenticate_user(data["username"], data["password"], message.from_user.id, message.from_user.username)
         if (status == METHOOD_STATUS.SUCCESSFUL):
