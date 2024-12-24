@@ -69,4 +69,6 @@ async def cmd_change_language_button(message: types.Message):
 # Handler for logout button
 @handlers.message(and_f(Registered(), CheckCommand("logout")))
 async def cmd_logout_button(message: types.Message):
-    await message.reply("You have been logged out.")
+    await models.logout(message.from_user.id)
+    await message.reply("Bizning xizmatimizdan foydalanganingiz uchun rahmat!\n"
+                        "Спасибо, что воспользовались нашим сервисом!")
