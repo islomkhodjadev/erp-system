@@ -100,7 +100,7 @@ class OrderForm(forms.Form):
 # Translation dictionary where the language code is the key, and inside it we have the translated terms.
 TRANSLATIONS = {
     "ru": {
-        "order_plintus_form": "Plintus buyurtma formasi",
+        "order_plintus_form": "Форма заказа Плинтуса",
         "order_success": "Ваш заказ был успешно оформлен:",
         "plintus_code": "Код плинтуса:",
         "number_of_plintus": "Количество плинтусов:",
@@ -115,7 +115,7 @@ TRANSLATIONS = {
         "submit": "Отправить"
     },
     "uz": {
-        "order_plintus_form": "Форма заказа Плинтуса",
+        "order_plintus_form": "Plintus buyurtma formasi",
         "order_success": "Sizning buyurtmangiz muvaffaqiyatli joylandi:",
         "plintus_code": "Plyintus kodi:",
         "number_of_plintus": "Plyintuslar soni:",
