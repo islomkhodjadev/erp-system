@@ -72,6 +72,7 @@ def logout(telegram_id):
     try:
         profile = Profile.objects.get(telegram_id=str(telegram_id))
         profile.is_loggined = False
+        profile.save()
         return True
     except Profile.DoesNotExist:
         return False
