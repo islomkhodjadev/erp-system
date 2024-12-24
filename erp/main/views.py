@@ -3,7 +3,7 @@ from .models import Plintus, PlintusComponent
 from .forms import OrderForm, process_order
 import decimal, json
 
-import forms
+from .forms import translate
 
 # Import necessary modules
 from django.http import JsonResponse
@@ -70,12 +70,12 @@ def order_view(request, language):
         'plintus_list': Plintus.objects.all(),
         'status': status,
         'message': message,
-        "choose_plintus": forms.translate(language, "choose_plintus"),
-        "close": forms.translate(language, "close"),
-        "total_price": forms.translate(language, "total_price"),
-        "clean": forms.translate(language, "clean"),
-        "submit": forms.translate(language, "submit"),
-        "order_plintus_form": forms.translate(language, "order_plintus_form")
+        "choose_plintus": translate(language, "choose_plintus"),
+        "close": translate(language, "close"),
+        "total_price": translate(language, "total_price"),
+        "clean": translate(language, "clean"),
+        "submit": translate(language, "submit"),
+        "order_plintus_form": translate(language, "order_plintus_form")
     })
 
 # View to fetch the components related to a specific Plintus by its code
