@@ -1,0 +1,12 @@
+<!-- templates/admin/profile_changelist.html -->
+{% extends "admin/change_list.html" %}
+
+{% block object-tools %}
+<div class="object-tools">
+    <ul>
+        <li>
+            <a href="{% url 'admin:upload_excel' %}" class="button">Upload Excel</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

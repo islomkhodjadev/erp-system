@@ -57,6 +57,8 @@ class Profile(models.Model):
             self.set_password(self.password)
         super().save(*args, **kwargs)
 
+from decimal import Decimal, InvalidOperation
+
 # Debt model to track user borrowings and repayments
 class Debt(models.Model):
     """
@@ -64,16 +66,25 @@ class Debt(models.Model):
     total paid amount, and remaining balance.
     """
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='debts')
-    total_borrowed = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    total_paid = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    remaining_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_borrowed = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
+    total_paid = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
+    remaining_balance = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
 
     def save(self, *args, **kwargs):
         """
         Override the save method to automatically calculate the remaining balance.
         The remaining balance is the difference between total borrowed and total paid amounts.
         """
-        self.remaining_balance = self.total_borrowed - self.total_paid
+        try:
+            self.total_borrowed = Decimal(self.total_borrowed)
+            self.total_paid = Decimal(self.total_paid)
+            self.remaining_balance = self.total_borrowed - self.total_paid
+            # Round to two decimal places
+
+        except InvalidOperation as e:
+            print(f"Error in Decimal operation: {e}")
+            self.remaining_balance = Decimal('0.00')  # Set to a default value on error
+
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -105,18 +116,23 @@ class DebtMovement(models.Model):
         - If 'debt', add to the total borrowed.
         - If 'paid', add to the total paid.
         """
+        # Convert amount to Decimal to avoid type mismatch
+        amount = Decimal(self.amount) if isinstance(self.amount, float) else self.amount
+
         if self.movement_type == 'debt':
             # Add to the total borrowed amount
-            self.debt.total_borrowed += self.amount
+            self.debt.total_borrowed += amount
         elif self.movement_type == 'paid':
             # Add to the total paid amount
-            self.debt.total_paid += self.amount
+            self.debt.total_paid += amount
+            
+        self.debt.total_borrowed = self.debt.total_borrowed.quantize(Decimal('0.01'))
+        self.debt.total_paid = self.debt.total_paid.quantize(Decimal('0.01'))
 
         super().save(*args, **kwargs)
 
         # Recalculate and save the debt to update the remaining balance
         self.debt.save()
-
     def __str__(self):
         """
         String representation of the movement, showing the type, amount, and date of the movement.

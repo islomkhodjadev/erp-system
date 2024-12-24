@@ -26,10 +26,10 @@ class DebtMovementAdmin(admin.ModelAdmin):
     search_fields = ('debt__profile__id_user', 'debt__profile__telegram_username')  # Search by user ID (id_user) and Telegram username
     list_filter = ('movement_type', 'movement_date')
 
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('id_user', 'telegram_id', 'telegram_username', 'language')
-    search_fields = ('id_user', 'telegram_id', 'telegram_username')
-    list_filter = ('language','telegram_id')
+# class ProfileAdmin(admin.ModelAdmin):
+#     list_display = ('id_user', 'telegram_id', 'telegram_username', 'language')
+#     search_fields = ('id_user', 'telegram_id', 'telegram_username')
+#     list_filter = ('language','telegram_id')
 
 class PlintusComponentAdmin(admin.ModelAdmin):
     list_display = ('plintus', 'get_type_display', 'code', 'price', 'count_in_packs')
@@ -42,7 +42,7 @@ class PlintusAdmin(admin.ModelAdmin):
     list_filter = ('price',)
 
 # Registering the models with their respective admin
-admin.site.register(Profile, ProfileAdmin)
+# admin.site.register(Profile, ProfileAdmin)
 # admin.site.register(Plintus, PlintusAdmin)
 admin.site.register(PlintusComponent, PlintusComponentAdmin)
 admin.site.register(Debt, DebtAdmin)
@@ -56,7 +56,7 @@ from django.urls import path
 from django.http import HttpResponseRedirect
 from .models import Plintus, PlintusComponent
 from .forms import ExcelUploadForm
-from .utils import extract_process_and_combine_sheets  # Ensure your function is in utils.py or similar
+from .utils import create_or_update_user_data, extract_process_and_combine_sheets   # Ensure your function is in utils.py or similar
 import pandas as pd
 
 class PlintusAdmin(admin.ModelAdmin):
@@ -139,3 +139,50 @@ class PlintusAdmin(admin.ModelAdmin):
         return render(request, 'admin/upload_excel.html', context)
 
 admin.site.register(Plintus, PlintusAdmin)
+
+
+
+
+from django.contrib import admin
+from django.shortcuts import render
+from django.urls import path
+from django.http import HttpResponseRedirect
+from .models import Profile
+from .forms import ExcelUploadForm
+from .utils import use_debt_save  # Import your Excel processing function
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('id_user', 'telegram_id', 'telegram_username', 'language', 'is_loggined', 'is_blocked')
+    search_fields = ('id_user', 'telegram_username', 'telegram_id')
+    change_list_template = "admin/profile_changelist.html"  # Custom template for list view
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('upload-excel/', self.admin_site.admin_view(self.upload_excel_view), name='upload_excel'),
+        ]
+        return custom_urls + urls
+
+    def upload_excel_view(self, request):
+        if request.method == "POST":
+            form = ExcelUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                excel_file = request.FILES['file']
+                try:
+                    # Call your import function to process the Excel file
+                    # create_or_update_user_data()
+                    use_debt_save(excel_file)
+                    self.message_user(request, "Excel file uploaded and processed successfully.")
+                    return HttpResponseRedirect("../")  # Redirect back to the list page
+                except Exception as e:
+                    self.message_user(request, f"Error processing file: {e}", level="error")
+        else:
+            form = ExcelUploadForm()
+
+        context = {
+            'form': form,
+            'opts': self.model._meta,
+        }
+        return render(request, 'admin/upload_excel.html', context)
+
+admin.site.register(Profile, ProfileAdmin)
