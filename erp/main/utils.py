@@ -179,7 +179,8 @@ def send_message_to_telegram(chat_id, message):
     url = f"https://api.telegram.org/bot{API_TOKEN}/sendMessage"
     data = {
         'chat_id': chat_id,
-        'text': message
+        'text': message,
+        "parse_mode": "HTML"
     }
 
     # Send the message via Telegram Bot API

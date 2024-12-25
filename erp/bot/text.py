@@ -9,10 +9,11 @@ translations = {
         "see_profile": "Profilni ko'rish",
         "change_language": "Tilni o'zgartirish",
         "logout": "Chiqish",
-  "debt_overview": "💰 **{username} uchun qarz haqida ma'lumot**:\n"
-                         "📌 **Jami qarz olingan:** ${total_borrowed:,.2f}\n"
-                         "✅ **Jami to'langan:** ${total_paid:,.2f}\n"
-                         "❗ **Qarz qoldig'i:** ${remaining_balance:,.2f}\n",
+        "debt_overview": 
+    "💰 <b>@{username} uchun qarz haqida ma'lumot</b>:\n"
+    "📌 <b>Jami qarz olingan:</b> ${total_borrowed:,.2f}\n"
+    "✅ <b>Jami to'langan:</b> ${total_paid:,.2f}\n"
+    "❗ <b>Qarz qoldig'i:</b> ${remaining_balance:,.2f}\n",
         "profile_not_found": "⚠️ Telegram ID {telegram_id} uchun profil topilmadi.",
         "error_retrieving_debt": "⚠️ Qarz ma'lumotlarini olishda xatolik yuz berdi: {error_message}",
            "price_list": "Narxlar ro'yxati:\n{price_list_details}",
@@ -41,10 +42,11 @@ translations = {
         "see_profile": "Посмотреть профиль",
         "change_language": "Изменить язык",
         "logout": "Выход",
-        "debt_overview": "💰 **Обзор задолженности для {username}**:\n"
-                         "📌 **Всего взято в долг:** ${total_borrowed:,.2f}\n"
-                         "✅ **Всего выплачено:** ${total_paid:,.2f}\n"
-                         "❗ **Остаток долга:** ${remaining_balance:,.2f}\n",
+        "debt_overview": 
+    "💰 <b>@{username} для обзора задолженности</b>:\n"
+    "📌 <b>Всего взято в долг:</b> ${total_borrowed:,.2f}\n"
+    "✅ <b>Всего выплачено:</b> ${total_paid:,.2f}\n"
+    "❗ <b>Остаток долга:</b> ${remaining_balance:,.2f}\n",
         "profile_not_found": "⚠️ Профиль с Telegram ID {telegram_id} не найден.",
         "error_retrieving_debt": "⚠️ Ошибка при получении информации о долге: {error_message}",
           "price_list": "Список цен:\n{price_list_details}",
@@ -91,26 +93,4 @@ translations = {
         "write_question": "Iltimos, savolingizni yozing. / Пожалуйста, напишите ваш вопрос."
 }
 
-}
-
-
-debt_templates = {
-    "uz": (
-        "💼 *Qarz haqida ma'lumot*\n\n"
-        "📅 Sana: {current_date}\n"
-        "💰 *Jami qarz summasi:* {total_borrowed}\n"
-        "✅ *Jami to'langan summa:* {total_paid}\n"
-        "⚠️ *Qolgan qarz:* {remaining_balance}\n\n"
-        "🕰️ Qarzlaringizni o'z vaqtida to'lashni unutmang! 🙏\n"
-        "Bizning xizmatlarimizdan foydalanganingiz uchun rahmat! 💖"
-    ),
-    "ru": (
-        "💼 *Информация о долге*\n\n"
-        "📅 Дата: {current_date}\n"
-        "💰 *Общая сумма займа:* {total_borrowed}\n"
-        "✅ *Общая сумма погашений:* {total_paid}\n"
-        "⚠️ *Оставшаяся задолженность:* {remaining_balance}\n\n"
-        "🕰️ Не забудьте вовремя оплатить долг! 🙏\n"
-        "Спасибо, что пользуетесь нашими услугами! 💖"
-    )
 }

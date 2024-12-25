@@ -173,7 +173,6 @@ def process_order(form, language="ru"):
                 errors[component.type] = translate(language, "not_enough_stock", available=available_component_stock)
 
         if errors:
-            
             return {"status": "error", "errors": errors}
 
         # Calculate the total price for the plintus and components
@@ -181,25 +180,27 @@ def process_order(form, language="ru"):
 
         # Initialize the success message with the plintus price
         success_message = f"""
-        {translate(language, 'order_success')}:
-        {translate(language, 'plintus_code')} {plintus_code}
-        {translate(language, 'number_of_plintus')} {number_of_plintus}
-        {translate(language, 'plintus_total_price')} {total_price} $
+<b>{translate(language, 'order_success')}</b>:
+<b>{translate(language, 'plintus_code')}:</b> {plintus_code}
+<b>{translate(language, 'number_of_plintus')}:</b> {number_of_plintus}
+<b>{translate(language, 'plintus_total_price')}:</b> {total_price} $
 
-        {translate(language, 'components')}:
-        """
+<b>{translate(language, 'components')}:</b>
+<pre>
+"""
 
         # Loop over components and add their prices to the success message
         for component in components:
             quantity = locals().get(component.type)
             component_total_price = quantity * component.price  # Calculate price for the component
-            success_message += f"""
-            - {component.type}: {quantity} x {component.price}$ = {component_total_price} $
-            """
+            success_message += f"{component.type}: {quantity} x {component.price}$ = {component_total_price} $\n"
             total_price += component_total_price  # Add component price to the total
 
+        # Close the preformatted section
+        success_message += "</pre>"
+
         # Final total price
-        success_message += f"\n{translate(language, 'total_price')} {total_price} $"
+        success_message += f"\n<b>{translate(language, 'total_price')}:</b> {total_price} $"
 
         return {"status": "success", "message": success_message, "user_id": user_id}
     

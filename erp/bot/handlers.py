@@ -10,7 +10,8 @@ from filters import Registered, CheckCommand
 from aiogram.filters import  and_f
 import inlines
 from fsm import Support
-
+from aiogram.enums.parse_mode import ParseMode
+ 
 handlers = Router(name=__name__)
 import models
 import markup
@@ -18,27 +19,27 @@ import markup
 @handlers.message(and_f(Registered(), CheckCommand("order_form")))
 async def cmd_order_form_button(message: types.Message):
     language = await models.get_language(message.from_user.id)
-    await message.reply("order", reply_markup=inlines.generate_open_order_button(language))
+    await message.answer("order", reply_markup=inlines.generate_open_order_button(language), parse_mode=ParseMode.HTML)
 
 
 # Handle contacts commanddebt
 @handlers.message(and_f(Registered(), CheckCommand("debts")))
 async def cmd_contacts_button(message: types.Message):
     text = await models.get_debt_overview(message.from_user.id)
-    await message.reply(text)
+    await message.answer(text, parse_mode=ParseMode.HTML)
 
 
 @handlers.message(CheckCommand("price"))
 async def cmd_price_button(message: types.Message):
     text  = await models.get_price_list(message.from_user.id)
-    await message.reply(text)  # Example price.in_(Uzbek
+    await message.answer(text, parse_mode=ParseMode.HTML)  # Example price.in_(Uzbek
 
 
 # Handle location command
 @handlers.message(CheckCommand("location"))
 async def cmd_location_button(message: types.Message):
     location = await models.get_location(message.from_user.id)
-    await message.answer(location["address"])
+    await message.answer(location["address"], parse_mode=ParseMode.HTML)
     await message.answer_location(latitude=location["latitude"], longitude=location["longitude"])
 
 
@@ -47,7 +48,7 @@ async def cmd_location_button(message: types.Message):
 @handlers.message(and_f(CheckCommand("contacts")))
 async def cmd_contacts_button(message: types.Message):
     text = await models.get_contact_info(message.from_user.id)
-    await message.reply(text)
+    await message.answer(text, parse_mode=ParseMode.HTML)
 
 
 
@@ -55,14 +56,14 @@ async def cmd_contacts_button(message: types.Message):
 async def command_start(message: types.Message, state: FSMContext) -> None:
     await state.set_state(Support.message)
     language = await models.get_language(message.from_user.id)
-    await message.answer(translations[language]["write_question"])
+    await message.answer(translations[language]["write_question"], parse_mode=ParseMode.HTML)
 
 
 # # Handler for see profile.in_(both Russian and Uzbek
 # @handlers.message(and_f(Registered(), CheckCommand("see_profile")))
 # async def cmd_see_profile_button(message: types.Message):
     
-#     await message.reply("🧑‍💻 *Foydalanuvchi profili:*\n" 
+#     await message.answer("🧑‍💻 *Foydalanuvchi profili:*\n" 
 #                             "👤 *Foydalanuvchi nomi:* {username}\n"
 #                             "🌍 *Til:* {language}")
 
@@ -72,12 +73,12 @@ async def command_start(message: types.Message, state: FSMContext) -> None:
 async def cmd_change_language_button(message: types.Message):
     await message.answer(
             "Iltimos, tilni tanlang"
-            "Пожалуйста, выберите язык", reply_markup=inlines.generate_choose_language_button())
+            "Пожалуйста, выберите язык", reply_markup=inlines.generate_choose_language_button(), parse_mode=ParseMode.HTML)
 
 
 # Handler for logout button
 @handlers.message(and_f(Registered(), CheckCommand("logout")))
 async def cmd_logout_button(message: types.Message):
     await models.logout(message.from_user.id)
-    await message.reply("Bizning xizmatimizdan foydalanganingiz uchun rahmat!\n"
-                        "Спасибо, что воспользовались нашим сервисом!", reply_markup=markup.generate_buttons_not_registered())
+    await message.answer("Bizning xizmatimizdan foydalanganingiz uchun rahmat!\n"
+                        "Спасибо, что воспользовались нашим сервисом!", reply_markup=markup.generate_buttons_not_registered(), parse_mode=ParseMode.HTML)
