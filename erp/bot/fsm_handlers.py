@@ -31,7 +31,7 @@ fsm_handlers = Router(name=__name__)
 import markup
 
 
-@fsm_handlers.message(F.text == "Use without login / Использовать без входа")
+@fsm_handlers.message(F.text == "Tizimga kirmasdan foydalanish / Использовать без входа")
 async def start_bot_without_login(message: Message):
     
     await message.reply("Bizning xizmatimizdan foydalanganingiz uchun rahmat!\n"
@@ -52,6 +52,9 @@ async def process_name(message: Message, state: FSMContext) -> None:
                 keyboard=[
                     [
                         KeyboardButton(text="Tizimga kirmasdan foydalanish / Использовать без входа"),
+                    ],
+                    [
+                        KeyboardButton(text="/login")
                     ]
                 ],
                 resize_keyboard=True,

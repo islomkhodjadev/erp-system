@@ -72,7 +72,7 @@ async def command_start(message: types.Message, state: FSMContext) -> None:
 @handlers.message(and_f(Registered(), CheckCommand("change_language")))
 async def cmd_change_language_button(message: types.Message):
     await message.answer(
-            "Iltimos, tilni tanlang"
+            "Iltimos, tilni tanlang\n"
             "Пожалуйста, выберите язык", reply_markup=inlines.generate_choose_language_button(), parse_mode=ParseMode.HTML)
 
 
