@@ -128,9 +128,6 @@ from .models import Profile, Chats
 API_TOKEN = os.getenv("tg_token")
 
 
-import requests
-
-API_TOKEN = 'your_telegram_bot_token'  # Replace with your actual bot token
 
 def inform_order_user_gorup(user_id, message):
     """
@@ -171,6 +168,7 @@ def inform_order_user_gorup(user_id, message):
 
 
 def send_message_to_telegram(chat_id, message):
+    
     """
     Helper function to send a message via Telegram Bot API.
     
