@@ -152,7 +152,7 @@ def inform_order_user_gorup(user_id, message):
         # Send message to the individual user
         send_message_to_telegram(user_id, message)
         
-        group_message = f"Новый заказ от @{user_username} ({profile.name if profile.name else ''})\nYangi buyurtma @{user_username} ({profile.name if profile.name else ''}):\n\n{message}"
+        group_message = f"Новый заказ от @{user_username} {profile.name if profile.name else ''}\nYangi buyurtma @{user_username} {profile.name if profile.name else ''}:\n\n{message}"
 
 
         # Send message to the group chat
