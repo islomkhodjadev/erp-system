@@ -39,7 +39,7 @@ def authenticate_user(user_id, password, telegram_id, telegram_username):
     
     try:
         # Retrieve profile asynchronously
-        profile = get_object_or_404(Profile, id_user=user_id)
+        profile = Profile.objects.get(id_user=user_id)
     except Profile.DoesNotExist:
         return METHOOD_STATUS.NOTFOUND
     
