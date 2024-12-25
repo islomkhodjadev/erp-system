@@ -45,6 +45,7 @@ API_TOKEN = os.getenv("tg_token")
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 
+import markup
 
 # Handle start command
 @dp.message(or_f(CommandStart(), Command("login")))
@@ -52,14 +53,7 @@ async def command_start(message: Message, state: FSMContext) -> None:
     await state.set_state(Login.username)
     await message.answer(text="Iltimos, foydalanuvchi nomini kiriting 🇺🇿\n"
         "Пожалуйста, напишите имя пользователя 🇷🇺",
-        reply_markup=ReplyKeyboardMarkup(
-            keyboard=[
-                [
-                   KeyboardButton(text="Tizimga kirmasdan foydalanish / Использовать без входа"),
-                ]
-            ],
-            resize_keyboard=True,
-        ))
+        reply_markup=markup.generate_first_start_markup())
 
 
 # Run the bot

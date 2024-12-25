@@ -1,14 +1,14 @@
 translations = {
     "uz": {
-        "order_form": "Plintus buyurtma berish",
-        "debts": "Qarzdorliklar",
-        "contacts": "Kontaktlar",
-        "location": "Joylashuv",
-        "support": "Qo'llab-quvvatlash",
-        "price": "Narx",
-        "see_profile": "Profilni ko'rish",
-        "change_language": "Tilni o'zgartirish",
-        "logout": "Chiqish",
+        "order_form": "🛒 Plintus buyurtma berish",
+"debts": "💳 Qarzdorliklar",
+"contacts": "📞 Kontaktlar",
+"location": "📍 Joylashuv",
+"support": "💬 Qo'llab-quvvatlash",
+"price": "💵 Narx",
+"see_profile": "👤 Profilni ko'rish",
+"change_language": "🌐 Tilni o'zgartirish",
+"logout": "🚪 Chiqish",
         "debt_overview": 
     "💰 <b>@{username} uchun qarz haqida ma'lumot</b>:\n"
     "📌 <b>Jami qarz olingan:</b> ${total_borrowed:,.2f}\n"
@@ -33,15 +33,16 @@ translations = {
 
     },
     "ru": {
-        "order_form": "Заказать плинтус",
-        "debts": "Долги",
-        "contacts": "Контакты",
-        "location": "Местоположение",
-        "support": "Поддержка",
-        "price": "Цена",
-        "see_profile": "Посмотреть профиль",
-        "change_language": "Изменить язык",
-        "logout": "Выход",
+        "order_form": "🛒 Заказать плинтус",
+"debts": "💳 Долги",
+"contacts": "📞 Контакты",
+"location": "📍 Местоположение",
+"support": "💬 Поддержка",
+"price": "💵 Цена",
+"see_profile": "👤 Посмотреть профиль",
+"change_language": "🌐 Изменить язык",
+"logout": "🚪 Выход",
+
         "debt_overview": 
     "💰 <b>@{username} для обзора задолженности</b>:\n"
     "📌 <b>Всего взято в долг:</b> ${total_borrowed:,.2f}\n"
@@ -68,14 +69,14 @@ translations = {
   
     },
     "standart": {
-        "order_form": "Plintus buyurtma berish",
-        "debts": "Qarzdorliklar",
-        "support": "Qo'llab-quvvatlash",
-        "see_profile": "Profilni ko'rish",
-        "change_language": "Tilni o'zgartirish",
-        "contacts": "Kontaktlar / Контакты",
-        "price": "Narx / Цена",
-    "login": "Kirish / Вход",
+        "order_form": "🛒 Plintus buyurtma berish",
+"debts": "💳 Qarzdorliklar",
+"support": "💬 Qo'llab-quvvatlash",
+"see_profile": "👤 Profilni ko'rish",
+"change_language": "🌐 Tilni o'zgartirish",
+"contacts": "📞 Kontaktlar / Контакты",
+"price": "💵 Narx / Цена",
+"login": "🔑 Kirish / Вход",
       "price_list": "Список цен / Narxlar ro'yxati:\n{price_list_details}",
         "per_package": "за упаковку / paket uchun",
         "per_meter": "за метр / metr uchun",

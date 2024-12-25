@@ -47,3 +47,18 @@ def generate_buttons_not_registered():
         ],
         resize_keyboard=True,
     )
+
+
+
+def generate_first_start_markup():
+    return ReplyKeyboardMarkup(
+            keyboard=[
+                 [
+                        KeyboardButton(text="Tizimga kirmasdan foydalanish / Использовать без входа"),
+                    ],
+                    [
+                        KeyboardButton(text="/login")
+                    ]
+            ],
+            resize_keyboard=True,
+        )

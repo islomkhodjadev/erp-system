@@ -48,17 +48,7 @@ async def process_name(message: Message, state: FSMContext) -> None:
         await message.answer(
             text="Iltimos, foydalanuvchi nomini kiriting 🇺🇿"
             "Пожалуйста, напишите имя пользователя 🇷🇺",
-            reply_markup=ReplyKeyboardMarkup(
-                keyboard=[
-                    [
-                        KeyboardButton(text="Tizimga kirmasdan foydalanish / Использовать без входа"),
-                    ],
-                    [
-                        KeyboardButton(text="/login")
-                    ]
-                ],
-                resize_keyboard=True,
-            )
+            reply_markup=markup.generate_first_start_markup()
         )
     else:
         await state.update_data(username=message.text)
