@@ -74,7 +74,7 @@ translations = {
 "support": "💬 Qo'llab-quvvatlash",
 "see_profile": "👤 Profilni ko'rish",
 "change_language": "🌐 Tilni o'zgartirish",
-"contacts": "📞 Kontaktlar / Контакты",
+"contacts": "Kontaktlar / Контакты",
 "price": "💵 Narx / Цена",
 "login": "🔑 Kirish / Вход",
       "price_list": "Список цен / Narxlar ro'yxati:\n{price_list_details}",
