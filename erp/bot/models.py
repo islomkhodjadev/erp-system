@@ -283,6 +283,7 @@ def get_contact_info(telegram_id):
         language = profile.language or "standart"  # Default to 'standart' if no language set
         if not profile.is_loggined:
             language = "standart"
+        
         # Fetch the company contact info
         company = Company.objects.first()  # Assuming you only have one company, or you can modify as needed
         

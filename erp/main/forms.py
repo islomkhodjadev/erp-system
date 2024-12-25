@@ -101,12 +101,12 @@ class OrderForm(forms.Form):
 TRANSLATIONS = {
     "ru": {
         "order_plintus_form": "Форма заказа Плинтуса",
-        "order_success": "Ваш заказ был успешно оформлен:",
         "plintus_code": "Код плинтуса:",
-        "number_of_plintus": "Количество плинтусов:",
-        "plintus_total_price": "Итоговая стоимость плинтуса:",
-        "components": "Компоненты:",
-        "total_price": "Общая стоимость (Плинтус + Компоненты):",
+        "order_success": "Ваш заказ был успешно оформлен",
+        "number_of_plintus": "Количество плинтусов",
+        "plintus_total_price": "Итоговая стоимость плинтуса",
+        "components": "Компоненты",
+        "total_price": "Общая стоимость (Плинтус + Компоненты)",
         "not_enough_stock": "Недостаточно товара на складе. Доступно: {available} упаковок.",
         "form_invalid": "Форма не является действительной.",
         "choose_plintus": "Выберите тип плинтуса",
@@ -116,12 +116,12 @@ TRANSLATIONS = {
     },
     "uz": {
         "order_plintus_form": "Plintus buyurtma formasi",
-        "order_success": "Sizning buyurtmangiz muvaffaqiyatli joylandi:",
-        "plintus_code": "Plyintus kodi:",
-        "number_of_plintus": "Plyintuslar soni:",
-        "plintus_total_price": "Plyintusning umumiy narxi:",
-        "components": "Komponentlar:",
-        "total_price": "Umumiy narx (Plyintus + Komponentlar):",
+        "order_success": "Sizning buyurtmangiz muvaffaqiyatli joylandi",
+        "plintus_code": "Plyintus kodi",
+        "number_of_plintus": "Plyintuslar soni",
+        "plintus_total_price": "Plyintusning umumiy narxi",
+        "components": "Komponentlar",
+        "total_price": "Umumiy narx (Plyintus + Komponentlar)",
         "not_enough_stock": "Omborimizda etarli miqdorda mahsulot yo'q. Mavjud: {available} qadoqlar.",
         "form_invalid": "Forma amal qilmaydi.",
         "choose_plintus": "Plintus turini tanlang",
@@ -180,14 +180,13 @@ def process_order(form, language="ru"):
 
         # Initialize the success message with the plintus price
         success_message = f"""
-<b>{translate(language, 'order_success')}</b>:
-<b>{translate(language, 'plintus_code')}:</b> {plintus_code}
-<b>{translate(language, 'number_of_plintus')}:</b> {number_of_plintus}
-<b>{translate(language, 'plintus_total_price')}:</b> {total_price} $
+            <b>{translate(language, 'order_success')}</b>:
+            <b>{translate(language, 'plintus_code')}:</b> {plintus_code}
+            <b>{translate(language, 'number_of_plintus')}:</b> {number_of_plintus}
+            <b>{translate(language, 'plintus_total_price')}:</b> {total_price} $
 
-<b>{translate(language, 'components')}:</b>
-<pre>
-"""
+            <b>{translate(language, 'components')}:</b>
+            <blockquote>"""
 
         # Loop over components and add their prices to the success message
         for component in components:
@@ -197,7 +196,7 @@ def process_order(form, language="ru"):
             total_price += component_total_price  # Add component price to the total
 
         # Close the preformatted section
-        success_message += "</pre>"
+        success_message += "</blockquote>"
 
         # Final total price
         success_message += f"\n<b>{translate(language, 'total_price')}:</b> {total_price} $"
