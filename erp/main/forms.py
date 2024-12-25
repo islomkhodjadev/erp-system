@@ -112,7 +112,12 @@ TRANSLATIONS = {
         "choose_plintus": "Выберите тип плинтуса",
         "close": "Закрыть",
         "clean": "Очистить",
-        "submit": "Отправить"
+        "submit": "Отправить",
+        "vnutrenniy_ugol": "Внутренний угол",
+        "naruzhniy_ugol": "Наружный угол",
+        "zaglushka_levaya": "Заглушка левая",
+        "zaglushka_pravaya": "Заглушка правая",
+        "soedinitel": "Соединитель"
     },
     "uz": {
         "order_plintus_form": "Plintus buyurtma formasi",
@@ -127,9 +132,15 @@ TRANSLATIONS = {
         "choose_plintus": "Plintus turini tanlang",
         "close": "Yopish",
         "clean": "Tozalash",
-        "submit": "Yuborish"
+        "submit": "Yuborish",
+        "vnutrenniy_ugol": "Ichki burchak",
+        "naruzhniy_ugol": "Tashqi burchak",
+        "zaglushka_levaya": "Chap zaglushka",
+        "zaglushka_pravaya": "O'ng zaglushka",
+        "soedinitel": "Birlashtiruvchi"
     }
 }
+
 
 def translate(language, key, **kwargs):
     """
@@ -186,17 +197,15 @@ def process_order(form, language="ru"):
             <b>{translate(language, 'plintus_total_price')}:</b> {total_price} $
 
             <b>{translate(language, 'components')}:</b>
-            <blockquote>"""
+            """
 
         # Loop over components and add their prices to the success message
         for component in components:
             quantity = locals().get(component.type)
             component_total_price = quantity * component.price  # Calculate price for the component
-            success_message += f"{component.type}: {quantity} x {component.price}$ = {component_total_price} $\n"
+            success_message += f"<blockquote><b>{translate(language, component.type)}</b>: {quantity} x {component.price}$ = {component_total_price} $</blockquote>\n"
             total_price += component_total_price  # Add component price to the total
 
-        # Close the preformatted section
-        success_message += "</blockquote>"
 
         # Final total price
         success_message += f"\n<b>{translate(language, 'total_price')}:</b> {total_price} $"
