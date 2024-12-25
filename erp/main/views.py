@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views import View
 from .models import Profile
-from .utils import send_message_to_user
+from .utils import inform_order_user_gorup, send_message_to_telegram
 
 
 # View to handle order submission, including form validation and price calculation
@@ -37,7 +37,7 @@ def order_view(request, language):
                     telegram_id = profile.telegram_id
                     
                     # Send a success message
-                    send_message_to_user(telegram_id, message)
+                    inform_order_user_gorup(user_id, message)
                     status = True
                 except Profile.DoesNotExist:
                     # Handle the case where the user doesn't have a Telegram ID
@@ -54,7 +54,7 @@ def order_view(request, language):
                     telegram_id = profile.telegram_id
 
                     # Send an error message
-                    send_message_to_user(telegram_id, message)
+                    send_message_to_telegram(telegram_id, message)
                 except Profile.DoesNotExist:
                     return ("Telegram ID not found for user.")
         else:

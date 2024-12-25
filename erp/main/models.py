@@ -12,7 +12,7 @@ class Profile(models.Model):
     - Language preference
     """
     LANGUAGE_CHOICES = [("uz", "uz"), ("ru", "ru")]
-    
+    name = models.CharField(max_length=250, blank=True, null=True)
     # Custom user ID
     id_user = models.CharField(max_length=50, unique=True)
     # Unique Telegram user ID
@@ -70,23 +70,7 @@ class Debt(models.Model):
     total_paid = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
     remaining_balance = models.DecimalField(max_digits=100, decimal_places=2, default=0.00)
 
-    def save(self, *args, **kwargs):
-        """
-        Override the save method to automatically calculate the remaining balance.
-        The remaining balance is the difference between total borrowed and total paid amounts.
-        """
-        try:
-            self.total_borrowed = Decimal(self.total_borrowed)
-            self.total_paid = Decimal(self.total_paid)
-            self.remaining_balance = self.total_borrowed - self.total_paid
-            # Round to two decimal places
-
-        except InvalidOperation as e:
-            print(f"Error in Decimal operation: {e}")
-            self.remaining_balance = Decimal('0.00')  # Set to a default value on error
-
-        super().save(*args, **kwargs)
-
+    
     def __str__(self):
         """
         String representation of the debt, showing the profile ID and the remaining balance.
@@ -107,32 +91,10 @@ class DebtMovement(models.Model):
 
     debt = models.ForeignKey(Debt, on_delete=models.CASCADE, related_name='movements')
     movement_type = models.CharField(max_length=6, choices=MOVEMENT_CHOICES)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=100,decimal_places=2)
     movement_date = models.DateField(null=True, blank=True)
 
-    def save(self, *args, **kwargs):
-        """
-        Override the save method to update the debt amounts based on the movement type.
-        - If 'debt', add to the total borrowed.
-        - If 'paid', add to the total paid.
-        """
-        # Convert amount to Decimal to avoid type mismatch
-        amount = Decimal(self.amount) if isinstance(self.amount, float) else self.amount
-
-        if self.movement_type == 'debt':
-            # Add to the total borrowed amount
-            self.debt.total_borrowed += amount
-        elif self.movement_type == 'paid':
-            # Add to the total paid amount
-            self.debt.total_paid += amount
-            
-        self.debt.total_borrowed = self.debt.total_borrowed.quantize(Decimal('0.01'))
-        self.debt.total_paid = self.debt.total_paid.quantize(Decimal('0.01'))
-
-        super().save(*args, **kwargs)
-
-        # Recalculate and save the debt to update the remaining balance
-        self.debt.save()
+   
     def __str__(self):
         """
         String representation of the movement, showing the type, amount, and date of the movement.
@@ -189,3 +151,97 @@ class PlintusComponent(models.Model):
 
 
 
+
+
+
+class Company(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Company Name")
+    contact_number = models.CharField(max_length=20, verbose_name="Contact Number")
+    additional_contact_number = models.CharField(max_length=20, blank=True, null=True, verbose_name="Additional Contact Number")
+    telegram_username = models.CharField(max_length=100, blank=True, null=True, verbose_name="Telegram Username")
+    email = models.EmailField(max_length=255, blank=True, null=True, verbose_name="Email")
+    location_latitude = models.CharField(max_length=250, verbose_name="Latitude")
+    location_longitude = models.CharField(max_length=250, verbose_name="Longitude")
+    address = models.TextField(blank=True, null=True, verbose_name="Address")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Company"
+        verbose_name_plural = "Companies"
+
+
+
+from django.db import models
+
+class PriceList(models.Model):
+    name = models.CharField(max_length=250)  # Name of the price list or product
+    price_plintus_per_pack = models.CharField(max_length=250)  # Price for plinths per pack
+    price_plintus_per_meter = models.CharField(max_length=250)  # Price for plinths per meter
+    price_accessory_per_pack = models.CharField(max_length=250)  # Price for accessories per pack
+
+    def __str__(self):
+        return self.name
+
+
+
+
+
+class SupportMessage(models.Model):
+    """
+    Represents a support message from a user.
+    Stores the user profile, the message content, and the timestamp of the message.
+    """
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='support_messages')
+    message = models.TextField()  # The content of the support message
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    def __str__(self):
+        return f"Support Message from {self.profile.telegram_username if self.profile.telegram_username else 'User'} - {self.created_at}"
+
+    class Meta:
+        verbose_name = "Support Message"
+        verbose_name_plural = "Support Messages"
+
+
+
+from django.db import models
+
+class Chats(models.Model):
+    # Define the available chat types
+    SUPPORT_CHAT = 'support'
+    ORDER_CHAT = 'order'
+    
+    CHAT_TYPE_CHOICES = [
+        (SUPPORT_CHAT, 'Support Chat'),
+        (ORDER_CHAT, 'Order Chat'),
+    ]
+    
+    type = models.CharField(
+        max_length=20,
+        choices=CHAT_TYPE_CHOICES,  # Provide the options for the type field
+        unique=True  # Make sure the type is unique
+    )
+    chat_id = models.CharField(max_length=250)
+    @classmethod
+    def get_chat_id_by_type(cls, chat_type):
+        """
+        Retrieve a chat by its type ('support' or 'order').
+        
+        Args:
+        - chat_type (str): The type of the chat ('support' or 'order').
+        
+        Returns:
+        - Chats object if found, or None if no chat is found.
+        """
+        if chat_type not in [cls.SUPPORT_CHAT, cls.ORDER_CHAT]:
+            return None  # Invalid chat type
+        
+        return cls.objects.filter(type=chat_type).first().chat_id  # Return the first chat of the given type
+    
+    def __str__(self):
+        return f"Chat Type: {self.get_type_display()}"  # Human-readable representation of the type
+    
+    class Meta:
+        verbose_name = "Chat"
+        verbose_name_plural = "Chats"

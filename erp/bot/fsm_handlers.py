@@ -3,6 +3,7 @@ from aiogram.types import Message
 
 from aiogram import F
 
+import models
 import inlines
 
 
@@ -20,28 +21,23 @@ from aiogram.types import (
     
 )
 
-from fsm import Login
+from fsm import Login, Support
 from models import authenticate_user
 
 from STATUS_CODES import METHOOD_STATUS
-
+from text import translations
 
 fsm_handlers = Router(name=__name__)
-
+import markup
 
 
 @fsm_handlers.message(F.text == "Use without login / Использовать без входа")
 async def start_bot_without_login(message: Message):
     
-    markup = ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text="Контакты"),
-             KeyboardButton(text="Местоположение")],
-        
-        ],
-        resize_keyboard=True
-    )
-    await message.answer(reply_markup=markup)
+    await message.reply("Bizning xizmatimizdan foydalanganingiz uchun rahmat!\n"
+            "Спасибо, что воспользовались нашим сервисом!", reply_markup=markup.generate_buttons_not_registered())
+
+
 
 
 
@@ -101,3 +97,21 @@ async def process_password(message: Message, state: FSMContext) -> None:
                 "Пароль неверный.")
         await state.clear()
         await message.delete()
+
+
+from aiogram.methods.send_message import SendMessage
+
+@fsm_handlers.message(Support.message)
+async def process_support_message(message: Message, state: FSMContext) -> None:
+    if not message.text:
+        language = await models.get_language(message.from_user.id)
+        await message.answer(translations[language]["write_question"])
+    text = message.text
+    await state.clear()
+
+    text = await models.create_support_message_by_telegram_id(message.from_user.id, text)
+    chat_id = await models.get_support_chat_id()
+    await message.bot(SendMessage(chat_id=chat_id, text=text))
+    await message.answer("Наша команда поддержки ответит вам как можно скорее\nBizning qo'llab-quvvatlash jamoamiz imkon qadar tezroq javob beradi.")
+
+

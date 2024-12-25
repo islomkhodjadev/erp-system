@@ -22,10 +22,28 @@ def generate_buttons(language):
                 KeyboardButton(text=translations[language]["support"])
             ],
             [
-              KeyboardButton(text=translations[language]["see_profile"]),
+            #   KeyboardButton(text=translations[language]["see_profile"]),
               KeyboardButton(text=translations[language]["change_language"]),
               KeyboardButton(text=translations[language]["logout"])
             ]
+        ],
+        resize_keyboard=True,
+    )
+
+
+
+def generate_buttons_not_registered():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(text=translations["standart"]["price"]),
+                KeyboardButton(text=translations["standart"]["location"]),
+                KeyboardButton(text=translations["standart"]["contacts"])
+            ],
+            [
+                KeyboardButton(text="/login")
+            ],
+            
         ],
         resize_keyboard=True,
     )

@@ -15,7 +15,7 @@ import asyncio
 from aiogram.types.reply_keyboard_markup import ReplyKeyboardMarkup
 
 
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command, or_f
 
 from aiogram.fsm.context import FSMContext
 from aiogram.types.keyboard_button import KeyboardButton
@@ -47,7 +47,7 @@ dp = Dispatcher()
 
 
 # Handle start command
-@dp.message(CommandStart())
+@dp.message(or_f(CommandStart(), Command("login")))
 async def command_start(message: Message, state: FSMContext) -> None:
     await state.set_state(Login.username)
     await message.answer(text="Iltimos, foydalanuvchi nomini kiriting 🇺🇿\

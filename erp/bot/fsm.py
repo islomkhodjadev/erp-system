@@ -5,3 +5,6 @@ class Login(StatesGroup):
     password = State()
 
 
+
+class Support(StatesGroup):
+    message = State()

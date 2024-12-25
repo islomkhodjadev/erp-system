@@ -123,29 +123,74 @@ import requests
 
 # Load environment variables from .env file
 load_dotenv()
-
+from .models import Profile, Chats
 # Use your bot token from .env
 API_TOKEN = os.getenv("tg_token")
 
 
+import requests
 
-def send_message_to_user(user_id, message):
+API_TOKEN = 'your_telegram_bot_token'  # Replace with your actual bot token
+
+def inform_order_user_gorup(user_id, message):
     """
-    Function to send a message to a user via Telegram Bot API.
+    Function to send a message to both a user and a group chat (like an 'order' chat) via the Telegram Bot API.
+    
+    Args:
+    - user_id (str): The Telegram user ID.
+    - message (str): The message to be sent.
+    - group_chat_id (str): The ID of the group chat (e.g., 'order' chat).
+    
+    Returns:
+    - str: Confirmation or error message.
+    """
+    try:
+
+        # Fetch the user's username from the Profile model (assuming Profile model exists)
+        group_chat_id = Chats.get_chat_id_by_type("order")
+
+        profile = Profile.objects.get(telegram_id=user_id)  # Fetch profile based on the user_id
+        user_username = profile.telegram_username if profile.telegram_username else "User"
+
+        # Send message to the individual user
+        send_message_to_telegram(user_id, message)
+
+        group_message = (
+            f"Новый заказ от {user_username} ({profile.name}) / Yangi buyurtma {user_username} ({profile.name}):\n\n{message}"
+        )
+
+        # Send message to the group chat
+        send_message_to_telegram(group_chat_id, group_message)
+
+        return "Message sent to both user and group chat."
+    
+    except Profile.DoesNotExist:
+        return "User profile not found."
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+
+
+def send_message_to_telegram(chat_id, message):
+    """
+    Helper function to send a message via Telegram Bot API.
+    
+    Args:
+    - chat_id (str): The Telegram ID of the user or group chat.
+    - message (str): The message to be sent.
     """
     url = f"https://api.telegram.org/bot{API_TOKEN}/sendMessage"
     data = {
-        'chat_id': user_id,
+        'chat_id': chat_id,
         'text': message
     }
-    
+
+    # Send the message via Telegram Bot API
     response = requests.post(url, data=data)
-    
+
     if response.status_code != 200:
-        return f"Failed to send message. Status code: {response.status_code}"
+        print(f"Failed to send message. Status code: {response.status_code}")
     else:
-        return f"Message sent to user {user_id}"
-    
+        print(f"Message sent to chat ID {chat_id}")
 
 
 
@@ -224,7 +269,6 @@ def extract_all_sheets_to_dfs(excel_file):
 
         return sheet_dfs
     except Exception as e:
-        print(f"Error occurred while extracting sheets: {e}")
         return {}
 def process_sheets_to_userdata(sheet_dfs):
     user_data_list = []
@@ -232,8 +276,7 @@ def process_sheets_to_userdata(sheet_dfs):
     for sheet_name, combined_df in sheet_dfs.items():
 
         sheet_name = sheet_name.encode('utf-8').decode('utf-8')  # Decode the name in case it has non-ASCII characters
-        print(f"Processing sheet: {sheet_name}")
-
+        
         # Clean and convert the 'date' column directly to datetime, then format it
         combined_df['date'] = pd.to_datetime(combined_df[1].astype(str), format='%Y/%m/%d', errors='coerce').dt.strftime('%Y/%m/%d')
 
@@ -249,7 +292,6 @@ def process_sheets_to_userdata(sheet_dfs):
         combined_df['user_id'] = str(combined_df.iloc[0, 5])
         combined_df['password'] = str(combined_df.iloc[1, 5])
         if combined_df.empty:
-            print(f"Sheet {sheet_name} is empty.")
             continue  # Skip this sheet if it's empty
 
         # Create a new DataFrame with the relevant columns
@@ -325,106 +367,80 @@ def process_sheets_to_userdata(sheet_dfs):
 def use_debt_save(excel):
 # Example usage:
     sheet_dfs = extract_all_sheets_to_dfs(excel)
-    print(sheet_dfs)
     user_data_list = process_sheets_to_userdata(sheet_dfs)
-    print(user_data_list)
     create_or_update_user_data(user_data_list)
 
 from django.db import transaction
 from decimal import Decimal
 from datetime import date
 from main.models import Profile, Debt, DebtMovement
+from decimal import Decimal, InvalidOperation
 
+
+import math
+from decimal import Decimal, InvalidOperation, ROUND_UP
+
+def safe_decimal(value):
+    """
+    Safely convert input to a Decimal, replacing NaN, None, or invalid values with 0.0.
+    """
+    if value is None:
+        return Decimal('0.0')
+    
+    # If value is a string and it's 'nan', 'none', or empty, treat as 0.0
+    if isinstance(value, str) and value.strip().lower() in {'nan', 'none', ''}:
+        return Decimal('0.0')
+
+    # Check if the value is an actual NaN (float)
+    if isinstance(value, float) and math.isnan(value):
+        return Decimal('0.0')
+
+    try:
+        # Try converting the value to Decimal
+        return Decimal(value).quantize(Decimal('0.01'), rounding=ROUND_UP)
+    except (InvalidOperation, TypeError, ValueError):
+        # In case of invalid value, return 0.0
+        return Decimal('0.0')
+    
 def create_or_update_user_data(user_data_list):
-    # from decimal import Decimal
-    # from datetime import date
-    # import random
-
-    # # Generate 10 users with different profile and debt data
-    # user_data_list = []
-
-    # for i in range(1, 11):
-    #     profile_data = ProfileData(
-    #         id_user=f"user{i}",
-    #         telegram_id=f"tg{i}",
-    #         telegram_username=f"user_telegram{i}",
-    #         password=f"password{i}",
-    #         language="uz" if i % 2 == 0 else "ru",  # Alternate languages between 'uz' and 'ru'
-    #         is_loggined=random.choice([True, False]),
-    #         is_blocked=random.choice([True, False])
-    #     )
-
-    #     debt_data = DebtData(
-    #         profile_id_user=f"user{i}",
-    #         total_borrowed=Decimal(random.uniform(500.00, 2000.00)),  # Random borrowed amount between 500 and 2000
-    #         total_paid=Decimal(random.uniform(100.00, 1500.00)),  # Random paid amount between 100 and 1500
-    #         remaining_balance=Decimal(random.uniform(0.00, 1000.00))  # Random remaining balance
-    #     )
-
-    #     # Generate multiple debt movements (debt and paid) for this user
-    #     debt_movements = []
-    #     for j in range(3):  # 3 debt movements per user (mix of 'debt' and 'paid')
-    #         debt_movements.append(
-    #             DebtMovementData(
-    #                 debt_profile_id_user=f"user{i}",
-    #                 movement_type=random.choice(["debt", "paid"]),
-    #                 amount=Decimal(random.uniform(50.00, 500.00)),  # Random movement amount between 50 and 500
-    #                 movement_date=date(2024, random.choice([1, 2]), random.choice(range(1, 28)))  # Random date in 2024
-    #             )
-    #         )
-
-    #     user_data = UserData(
-    #         profile=profile_data,
-    #         debt=debt_data,
-    #         debt_movement=debt_movements
-    #     )
-
-    #     user_data_list.append(user_data)
-
-
     """
     Transforms a list of UserData objects into database records for Profile, Debt, and DebtMovement.
-
-    Args:
-        user_data_list (list): List of UserData instances to be transformed into database records.
     """
     # Start a database transaction to ensure atomicity
-    with transaction.atomic():
-        for user_data in user_data_list:
-            # 1. Create or Update Profile
-            profile, created = Profile.objects.get_or_create(
-                id_user=user_data.profile.id_user,
-                defaults={
-                    'telegram_id': user_data.profile.telegram_id,
-                    'telegram_username': user_data.profile.telegram_username,
-                    'password': user_data.profile.password,
-                    'language': user_data.profile.language,
-                    'is_loggined': user_data.profile.is_loggined,
-                    'is_blocked': user_data.profile.is_blocked
-                }
-            )
+    
+    for user_data in user_data_list:
+        # 1. Create or Update Profile
+        profile, created = Profile.objects.get_or_create(
+            
+            id_user=user_data.profile.id_user,
+            defaults={
+                "name": user_data.name,
+                'telegram_id': user_data.profile.telegram_id,
+                'telegram_username': user_data.profile.telegram_username,
+                'password': user_data.profile.password,
+                'language': user_data.profile.language,
+                'is_loggined': user_data.profile.is_loggined,
+                'is_blocked': user_data.profile.is_blocked
+            })
+        
+        # 2. Create or Update Debt
+        debt, created = Debt.objects.get_or_create(
+            profile=profile,
+            defaults={
+                'total_borrowed': user_data.debt.total_borrowed,
+                'total_paid': user_data.debt.total_paid,
+                'remaining_balance': user_data.debt.remaining_balance,
+            })
+        # 3. Create DebtMovements
+        for movement in user_data.debt_movement:
+            
+            DebtMovement.objects.create(
+                debt=debt,
+                movement_type=movement.movement_type,
+                amount=movement.amount,
+                movement_date=movement.movement_date)
+        
+        # After all movements are added, recalculate the debt balance
+        debt.save()
 
-            # 2. Create or Update Debt
-            debt, created = Debt.objects.get_or_create(
-                profile=profile,
-                defaults={
-                    'total_borrowed': user_data.debt.total_borrowed,
-                    'total_paid': user_data.debt.total_paid,
-                    'remaining_balance': user_data.debt.remaining_balance
-                }
-            )
-
-            # 3. Create DebtMovements
-            for movement in user_data.debt_movement:
-                # Create each debt movement (borrowed or paid)
-                DebtMovement.objects.create(
-                    debt=debt,
-                    movement_type=movement.movement_type,
-                    amount=movement.amount,
-                    movement_date=movement.movement_date
-                )
-
-            # After all movements are added, recalculate the debt balance (if necessary)
-            debt.save()
-
-    print(f"Successfully processed {len(user_data_list)} users' data.")
+    

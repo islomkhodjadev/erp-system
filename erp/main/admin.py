@@ -150,7 +150,8 @@ from django.http import HttpResponseRedirect
 from .models import Profile
 from .forms import ExcelUploadForm
 from .utils import use_debt_save  # Import your Excel processing function
-
+from .excel_worker import usage_debt
+        
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('id_user', 'telegram_id', 'telegram_username', 'language', 'is_loggined', 'is_blocked')
     search_fields = ('id_user', 'telegram_username', 'telegram_id')
@@ -167,15 +168,18 @@ class ProfileAdmin(admin.ModelAdmin):
         if request.method == "POST":
             form = ExcelUploadForm(request.POST, request.FILES)
             if form.is_valid():
-                excel_file = request.FILES['file']
                 try:
+                    excel_file = request.FILES['file']
+
                     # Call your import function to process the Excel file
-                    # create_or_update_user_data()
-                    use_debt_save(excel_file)
+                    create_or_update_user_data(usage_debt(excel_file))
+
                     self.message_user(request, "Excel file uploaded and processed successfully.")
                     return HttpResponseRedirect("../")  # Redirect back to the list page
+
                 except Exception as e:
-                    self.message_user(request, f"Error processing file: {e}", level="error")
+                    # Log the error and notify the user
+                    self.message_user(request, f"An error occurred while processing the Excel file: {str(e)}", level='error')
         else:
             form = ExcelUploadForm()
 
@@ -186,3 +190,112 @@ class ProfileAdmin(admin.ModelAdmin):
         return render(request, 'admin/upload_excel.html', context)
 
 admin.site.register(Profile, ProfileAdmin)
+
+
+
+from django.contrib import admin
+from .models import Company, PriceList
+
+# Register the Company model
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('name', 'contact_number', 'email', 'location_latitude', 'location_longitude', 'address')
+    search_fields = ('name', 'contact_number', 'email')
+    list_filter = ('location_latitude', 'location_longitude')
+
+    # Optionally, add fields for a more detailed layout in the admin
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'contact_number', 'additional_contact_number', 'telegram_username', 'email')
+        }),
+        ('Location Info', {
+            'fields': ('location_latitude', 'location_longitude', 'address')
+        }),
+    )
+
+# Register the PriceList model
+@admin.register(PriceList)
+class PriceListAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price_plintus_per_pack', 'price_plintus_per_meter', 'price_accessory_per_pack')
+    search_fields = ('name',)
+    list_filter = ('name',)
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('upload-excel/', self.admin_site.admin_view(self.upload_excel_view), name='upload_excel'),
+        ]
+        return custom_urls + urls
+
+    def upload_excel_view(self, request):
+        if request.method == "POST":
+            form = ExcelUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    excel_file = request.FILES['file']
+
+                    # Call your import function to process the Excel file
+                    # create_or_update_pricelist_data(excel_file)
+
+                    self.message_user(request, "Excel file uploaded and processed successfully.")
+                    return HttpResponseRedirect("../")  # Redirect back to the list page
+
+                except Exception as e:
+                    # Log the error and notify the user
+                    self.message_user(request, f"An error occurred while processing the Excel file: {str(e)}", level='error')
+        else:
+            form = ExcelUploadForm()
+
+        context = {
+            'form': form,
+            'opts': self.model._meta,
+        }
+        return render(request, 'admin/upload_excel.html', context)
+    
+    # Optionally, define fields to show in the admin form
+    fieldsets = (
+        (None, {
+            'fields': ('name',)
+        }),
+        ('Pricing Details', {
+            'fields': ('price_plintus_per_pack', 'price_plintus_per_meter', 'price_accessory_per_pack')
+        }),
+    )
+
+
+from django.contrib import admin
+from .models import SupportMessage, Chats
+
+class SupportMessageAdmin(admin.ModelAdmin):
+    list_display = ('profile', 'message', 'created_at')  # Display relevant fields in the list
+    search_fields = ('profile__telegram_username', 'message')  # Enable search by username or message
+    list_filter = ('created_at',)  # Filter messages by timestamp
+
+    def get_queryset(self, request):
+        """
+        Override to get the list of support messages and show only relevant data.
+        """
+        queryset = super().get_queryset(request)
+        return queryset.select_related('profile')  # This will reduce the number of queries
+    
+    class Meta:
+        model = SupportMessage
+
+admin.site.register(SupportMessage, SupportMessageAdmin)
+
+class ChatsAdmin(admin.ModelAdmin):
+    list_display = ('type', 'chat_id')  # Display the chat type and ID
+    search_fields = ('chat_id',)  # Enable search by chat ID
+    list_filter = ('type',)  # Filter by chat type (support or order)
+    ordering = ('type',)  # Order by type to easily distinguish chat types
+
+    def get_queryset(self, request):
+        """
+        Override to get the list of chats.
+        """
+        queryset = super().get_queryset(request)
+        return queryset
+    
+    class Meta:
+        model = Chats
+
+admin.site.register(Chats, ChatsAdmin)

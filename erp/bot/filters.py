@@ -22,5 +22,6 @@ class CheckCommand(Filter):
 
 
     async def __call__(self, message: Message) -> bool:
-        return message.text in [translations["ru"][self.comandName], translations["uz"][self.comandName]]
+        return message.text in [translations["ru"][self.comandName], translations["uz"][self.comandName], translations["standart"][self.comandName]] and message.chat.type == "private" 
+    
 
