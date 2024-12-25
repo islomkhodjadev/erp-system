@@ -32,8 +32,8 @@ import markup
 
 
 @fsm_handlers.message(F.text == "Tizimga kirmasdan foydalanish / Использовать без входа")
-async def start_bot_without_login(message: Message):
-    
+async def start_bot_without_login(message: Message, state: FSMContext):
+    await state.clear()
     await message.reply("Bizning xizmatimizdan foydalanganingiz uchun rahmat!\n"
             "Спасибо, что воспользовались нашим сервисом!", reply_markup=markup.generate_buttons_not_registered())
 
