@@ -190,15 +190,11 @@ def process_order(form, language="ru"):
         total_price = number_of_plintus * selected_plintus.price  # Price for plintus
 
         # Initialize the success message with the plintus price
-        success_message = f"""
-            <b>{translate(language, 'order_success')}</b>:
-            <b>{translate(language, 'plintus_code')}:</b> {plintus_code}
-            <b>{translate(language, 'number_of_plintus')}:</b> {number_of_plintus}
-            <b>{translate(language, 'plintus_total_price')}:</b> {total_price} $
-
-            <b>{translate(language, 'components')}:</b>
-            """
-
+        success_message = f"<b>{translate(language, 'order_success')}</b>:\n"
+        f"<b>{translate(language, 'plintus_code')}:</b> {plintus_code}\n"
+        f"<b>{translate(language, 'number_of_plintus')}:</b> {number_of_plintus}\n"
+        f"<b>{translate(language, 'plintus_total_price')}:</b> {total_price} $\n"
+        f"<b>{translate(language, 'components')}:</b>\n"
         # Loop over components and add their prices to the success message
         for component in components:
             quantity = locals().get(component.type)
