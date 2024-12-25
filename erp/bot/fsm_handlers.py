@@ -95,6 +95,11 @@ async def process_password(message: Message, state: FSMContext) -> None:
         elif (status == METHOOD_STATUS.INVALID):
             await message.answer("Parol noto‘g‘ri."
                 "Пароль неверный.")
+        elif (status == METHOOD_STATUS.NOTFOUND):
+            await message.answer("Profile mavjud emas."
+                     "Профиль не существует.")
+
+
         await state.clear()
         await message.delete()
 
