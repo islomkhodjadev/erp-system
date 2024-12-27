@@ -245,3 +245,28 @@ class Chats(models.Model):
     class Meta:
         verbose_name = "Chat"
         verbose_name_plural = "Chats"
+
+
+
+
+
+
+from django.db import models
+from asgiref.sync import sync_to_async
+
+# Django Model
+class TelegramUser(models.Model):
+    user_id = models.BigIntegerField(unique=True)
+    is_bot = models.BooleanField()
+    first_name = models.CharField(max_length=256)
+    last_name = models.CharField(max_length=256, null=True, blank=True)
+    username = models.CharField(max_length=256, null=True, blank=True)
+    language_code = models.CharField(max_length=10, null=True, blank=True)
+    is_premium = models.BooleanField(null=True, blank=True)
+    chat_id = models.BigIntegerField()
+    chat_type = models.CharField(max_length=50)
+    chat_title = models.CharField(max_length=256, null=True, blank=True)
+    chat_username = models.CharField(max_length=256, null=True, blank=True)
+    chat_first_name = models.CharField(max_length=256, null=True, blank=True)
+    chat_last_name = models.CharField(max_length=256, null=True, blank=True)
+    chat_is_forum = models.BooleanField(null=True, blank=True)

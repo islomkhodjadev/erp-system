@@ -15,7 +15,7 @@ django.setup()
 
 
 from django.utils import timezone
-from main.models import Profile, Debt, DebtMovement, Company, PriceList, Chats, SupportMessage, Profile
+from main.models import Profile, Debt, DebtMovement, Company, PriceList, Chats, SupportMessage, Profile, TelegramUser
 
 
 from django.contrib.auth.hashers import check_password
@@ -376,3 +376,28 @@ def create_support_message_by_telegram_id(telegram_id, message):
 def get_support_chat_id():
     chat_id = Chats.get_chat_id_by_type("support")
     return chat_id
+
+
+
+# Function to save data
+@sync_to_async
+def save_telegram_user_data(message):
+    # Save user and chat information
+    TelegramUser.objects.update_or_create(
+        user_id=message.from_user.id,
+        defaults={
+            "is_bot": message.from_user.is_bot,
+            "first_name": message.from_user.first_name,
+            "last_name": message.from_user.last_name,
+            "username": message.from_user.username,
+            "language_code": message.from_user.language_code,
+            "is_premium": message.from_user.is_premium,
+            "chat_id": message.chat.id,
+            "chat_type": message.chat.type,
+            "chat_title": message.chat.title,
+            "chat_username": message.chat.username,
+            "chat_first_name": message.chat.first_name,
+            "chat_last_name": message.chat.last_name,
+            "chat_is_forum": message.chat.is_forum,
+        },
+    )

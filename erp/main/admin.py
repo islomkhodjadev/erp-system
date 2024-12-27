@@ -66,7 +66,7 @@ class PlintusAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('upload-excel/', self.upload_excel, name='upload_excel'),
+            path('upload-excel/', self.upload_excel, name='plintus_upload_excel'),  # Unique name
         ]
         return custom_urls + urls
 
@@ -160,9 +160,10 @@ class ProfileAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('upload-excel/', self.admin_site.admin_view(self.upload_excel_view), name='upload_excel'),
+            path('upload-excel/', self.admin_site.admin_view(self.upload_excel_view), name='profile_upload_excel'),  # Unique name
         ]
         return custom_urls + urls
+
 
     def upload_excel_view(self, request):
         if request.method == "POST":
@@ -224,9 +225,10 @@ class PriceListAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('upload-excel/', self.admin_site.admin_view(self.upload_excel_view), name='upload_excel'),
+            path('upload-excel/', self.admin_site.admin_view(self.upload_excel_view), name='pricelist_upload_excel'),  # Unique name
         ]
         return custom_urls + urls
+
 
     def upload_excel_view(self, request):
         if request.method == "POST":
@@ -266,7 +268,7 @@ class PriceListAdmin(admin.ModelAdmin):
 
 
 from django.contrib import admin
-from .models import SupportMessage, Chats
+from .models import SupportMessage, Chats, TelegramUser
 
 class SupportMessageAdmin(admin.ModelAdmin):
     list_display = ('profile', 'message', 'created_at')  # Display relevant fields in the list
@@ -302,3 +304,74 @@ class ChatsAdmin(admin.ModelAdmin):
         model = Chats
 
 admin.site.register(Chats, ChatsAdmin)
+
+
+
+
+from django import forms
+from django.contrib.admin import ModelAdmin
+
+import requests
+
+from dotenv import load_dotenv
+
+load_dotenv()
+import os
+
+TG_API_TOKEN = os.getenv("tg_token")
+
+from django import forms
+
+class MessageBroadcastForm(forms.Form):
+    message_text = forms.CharField(widget=forms.Textarea(attrs={'cols': 80, 'rows': 20}), label="Message")
+
+# Custom Admin View
+class TelegramUserAdmin(ModelAdmin):
+    list_display = ("user_id", "first_name", "last_name", "username", "chat_id")
+    change_list_template = "admin/telegram_user_changelist.html"  # Custom template for change list page
+
+    def get_urls(self):
+        from django.urls import path
+        from django.shortcuts import render
+        from django.http import HttpResponseRedirect
+
+        urls = super().get_urls()
+        custom_urls = [
+            path("broadcast/", self.admin_site.admin_view(self.broadcast_message_view), name="broadcast_message"),
+        ]
+        return custom_urls + urls
+
+    def broadcast_message_view(self, request):
+        if request.method == "POST":
+            form = MessageBroadcastForm(request.POST)
+            if form.is_valid():
+                message = form.cleaned_data["message_text"]
+                bot_token = TG_API_TOKEN
+                url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+
+                for user in TelegramUser.objects.all():
+                    payload = {
+                        "chat_id": user.chat_id,
+                        "text": message,
+                        "parse_mode": "HTML"
+                    }
+                    try:
+                        response = requests.post(url, json=payload)
+                        if not response.ok:
+                            print(f"Failed to send message to {user.chat_id}: {response.text}")
+                    except Exception as e:
+                        print(f"Error sending message to {user.chat_id}: {e}")
+
+                self.message_user(request, "Message broadcasted successfully!")
+                return HttpResponseRedirect("../")
+        else:
+            form = MessageBroadcastForm()
+
+        context = {
+            "form": form,
+            "opts": self.model._meta,
+            "app_label": self.model._meta.app_label,
+        }
+        return render(request, "admin/broadcast_message.html", context)
+
+admin.site.register(TelegramUser, TelegramUserAdmin)
