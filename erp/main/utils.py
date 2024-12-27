@@ -442,3 +442,106 @@ def create_or_update_user_data(user_data_list):
         debt.save()
 
     
+
+
+
+    import pandas as pd
+from dataclasses import dataclass
+from decimal import Decimal, InvalidOperation
+
+@dataclass
+class PriceListData:
+    name: str
+    price_per_meter: str
+    price_per_piece: str
+    price_per_pack: str
+    price_accessory_per_pack: str  # Added the new field
+
+    def __str__(self):
+        return f"Product Name: {self.name}\n" \
+               f"price_plintus_per_meter: {self.price_per_meter}\n" \
+               f"Price_per_Piece: {self.price_per_piece}\n" \
+               f"price_plintus_per_pack: {self.price_per_pack}\n" \
+               f"price_accessory_per_pack: {self.price_accessory_per_pack}\n"  # Display the accessory price
+
+def read_excel_to_dfs(excel_file):
+    """
+    Reads an Excel file and extracts price list data from all sheets, excluding the "calculator" sheet.
+    Renames columns numerically and extracts price information to create PriceListData objects.
+
+    Args:
+        excel_file (str): Path to the Excel file.
+
+    Returns:
+        dict: A dictionary where keys are sheet names and values are lists of PriceListData objects.
+    """
+    try:
+        # Read all sheets into a dictionary of DataFrames
+        sheet_dfs = pd.read_excel(excel_file, sheet_name=None)
+
+        # Process each sheet
+        processed_dfs = {}
+        for name, df in sheet_dfs.items():
+            if name.lower() != "calculator":  # Exclude "calculator" sheet
+                # Rename columns numerically
+                df.columns = range(1, len(df.columns) + 1)
+
+                # Start processing from row 2 onward (skip header row)
+                df = df.iloc[1:]  # Slicing the DataFrame to start from the second row (index 1)
+                df.reset_index(drop=True, inplace=True)  # Reset index after slicing
+
+                # Replace NaN values with 0 in the relevant columns
+                df = df.fillna(0)
+
+                # Extract odd rows for product names, even rows for prices, and another for accessories
+                odd_rows = df.iloc[::4, :]  # 1st, 3rd, 5th rows, etc.
+                even_rows = df.iloc[1::4, :]  # 2nd, 4th, 6th rows, etc.
+                nothin_rows = df.iloc[2::4, :]  # Extracting the accessory rows
+
+                # Ensure odd and even rows align correctly
+                if len(odd_rows) > len(even_rows):
+                    odd_rows = odd_rows.iloc[:len(even_rows)]
+
+                # Combine odd, even, and nothin rows to extract information
+                price_list_data = [
+                    PriceListData(
+                        name=odd_rows.iloc[i, 0],
+                        price_per_meter=f"{Decimal(even_rows.iloc[i, 1]):.2f}" if even_rows.iloc[i, 1] else "0.00",
+                        price_per_piece=f"{Decimal(even_rows.iloc[i, 2]):.2f}" if even_rows.iloc[i, 2] else "0.00",
+                        price_per_pack=f"{Decimal(even_rows.iloc[i, 3]):.2f}" if even_rows.iloc[i, 3] else "0.00",
+                        price_accessory_per_pack=f"{Decimal(nothin_rows.iloc[i, 3]):.2f}" if nothin_rows.iloc[i, 3] else "0.00"
+                    )
+                    for i in range(len(odd_rows))
+                ]
+
+                # Store the processed data for the sheet
+                processed_dfs[name] = price_list_data
+
+        return processed_dfs
+    except FileNotFoundError:
+        print(f"Error: File '{excel_file}' not found.")
+        return {}
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return {}
+
+from .models import PriceList  # Replace 'your_app' with the actual app name
+def save_price_list_to_model(sheet_dfs):
+    """
+    Save the extracted price list data into the Django PriceList model.
+    
+    Args:
+        sheet_dfs (dict): The processed data dictionary with sheet names as keys
+                          and lists of PriceListData objects as values.
+    """
+    for sheet_name, price_list_data in sheet_dfs.items():
+        for item in price_list_data:
+            # Use update_or_create to update if it exists or create a new record if not
+            PriceList.objects.update_or_create(
+                name=item.name,  # Match by the 'name' field
+                defaults={
+                    'price_plintus_per_pack': item.price_per_pack,
+                    'price_plintus_per_meter': item.price_per_meter,
+                    'price_accessory_per_pack': item.price_accessory_per_pack,
+                }
+            )

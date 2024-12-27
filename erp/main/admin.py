@@ -56,7 +56,7 @@ from django.urls import path
 from django.http import HttpResponseRedirect
 from .models import Plintus, PlintusComponent
 from .forms import ExcelUploadForm
-from .utils import create_or_update_user_data, extract_process_and_combine_sheets   # Ensure your function is in utils.py or similar
+from .utils import create_or_update_user_data, extract_process_and_combine_sheets, read_excel_to_dfs, save_price_list_to_model   # Ensure your function is in utils.py or similar
 import pandas as pd
 
 class PlintusAdmin(admin.ModelAdmin):
@@ -219,6 +219,8 @@ class PriceListAdmin(admin.ModelAdmin):
     list_display = ('name', 'price_plintus_per_pack', 'price_plintus_per_meter', 'price_accessory_per_pack')
     search_fields = ('name',)
     list_filter = ('name',)
+    change_list_template = "admin/price_list_changelist.html"  # Custom template for list view
+
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
@@ -232,7 +234,8 @@ class PriceListAdmin(admin.ModelAdmin):
             if form.is_valid():
                 try:
                     excel_file = request.FILES['file']
-
+                    save_price_list_to_model(read_excel_to_dfs(excel_file))
+                    
                     # Call your import function to process the Excel file
                     # create_or_update_pricelist_data(excel_file)
 
