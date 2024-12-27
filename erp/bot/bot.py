@@ -50,7 +50,7 @@ import markup
 # Handle start command
 @dp.message(or_f(CommandStart(), Command("login")))
 async def command_start(message: Message, state: FSMContext) -> None:
-    models.save_telegram_user_data(message)
+    await models.save_telegram_user_data(message)
     await state.set_state(Login.username)
     await message.answer(text="Iltimos, foydalanuvchi nomini kiriting 🇺🇿\n"
         "Пожалуйста, напишите имя пользователя 🇷🇺",
