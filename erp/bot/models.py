@@ -217,9 +217,14 @@ def get_price_list(telegram_id):
         
         # Format the price list as a string
         price_list_details = "\n".join([
-            f"{price_list_item.name}: {price_list_item.price_plintus_per_pack} ({translation_strings['per_package']}), {price_list_item.price_plintus_per_meter} ({translation_strings['per_meter']}), {price_list_item.price_accessory_per_pack} ({translation_strings['per_accessory_pack']})"
+            f"<b>{price_list_item.name}</b>: \n"
+            f"<i>{translation_strings['per_package']}</i>: <b>{price_list_item.price_plintus_per_pack}</b>\n"
+            f"<i>{translation_strings['per_meter']}</i>: <b>{price_list_item.price_plintus_per_meter}</b>\n"
+            f"<i>{translation_strings['per_accessory_pack']}</i>: <b>{price_list_item.price_accessory_per_pack}</b>\n"
+            "<blockquote>────────────────────────────────────────────</blockquote>"
             for price_list_item in price_list
         ])
+
         
         # Return the formatted price list overview
         result = translation_strings["price_list"].format(price_list_details=price_list_details)

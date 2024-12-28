@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "main",
     'corsheaders',
+     'django_ckeditor_5',
 ]
 
 MIDDLEWARE = [
@@ -116,3 +117,83 @@ STATIC_ROOT = BASE_DIR / "static"
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+
+import os
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+customColorPalette = [
+            {
+                'color': 'hsl(4, 90%, 58%)',
+                'label': 'Red'
+            },
+            {
+                'color': 'hsl(340, 82%, 52%)',
+                'label': 'Pink'
+            },
+            {
+                'color': 'hsl(291, 64%, 42%)',
+                'label': 'Purple'
+            },
+            {
+                'color': 'hsl(262, 52%, 47%)',
+                'label': 'Deep Purple'
+            },
+            {
+                'color': 'hsl(231, 48%, 48%)',
+                'label': 'Indigo'
+            },
+            {
+                'color': 'hsl(207, 90%, 54%)',
+                'label': 'Blue'
+            },
+        ]
+
+
+
+
+CKEDITOR_5_CONFIGS = {
+    'broadcast': {
+        'toolbar': [
+            'bold', 'italic', 'underline', 'strikethrough', 'link', 'code', '|', 'undo', 'redo'
+        ],
+        'height': 150,
+        'width': 'auto',
+        'htmlSupport': {
+            'allow': [
+                {'name': 'b', 'attributes': True},
+                {'name': 'strong', 'attributes': True},
+                {'name': 'i', 'attributes': True},
+                {'name': 'em', 'attributes': True},
+                {'name': 'u', 'attributes': True},
+                {'name': 'ins', 'attributes': True},
+                {'name': 's', 'attributes': True},
+                {'name': 'strike', 'attributes': True},
+                {'name': 'del', 'attributes': True},
+                {'name': 'pre', 'attributes': True, 'classes': True, 'styles': True},
+                {'name': 'code', 'attributes': True, 'classes': True, 'styles': True},
+                {'name': 'a', 'attributes': ['href'], 'classes': True, 'styles': True},
+                {'name': 'tg-spoiler', 'attributes': True, 'classes': True, 'styles': True},  # Telegram Spoiler
+                {'name': 'tg-emoji', 'attributes': ['emoji-id'], 'classes': True, 'styles': True},  # Telegram Emoji
+            ]
+        },
+        # 'removePlugins': [
+        #     'Paragraph'  # Disables automatic wrapping with <p> tags (you can keep it as it is)
+        # ],
+        'defaultConfig': {
+            'blockElements': 'div'  # Replace paragraph behavior with <div> or another element
+        },
+    }
+}
+
+
+
+    # Define a constant in settings.py to specify file upload permissions
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Possible values: "staff", "authenticated", "any"
+

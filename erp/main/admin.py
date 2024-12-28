@@ -320,58 +320,101 @@ import os
 
 TG_API_TOKEN = os.getenv("tg_token")
 
-from django import forms
-
-class MessageBroadcastForm(forms.Form):
-    message_text = forms.CharField(widget=forms.Textarea(attrs={'cols': 80, 'rows': 20}), label="Message")
-
+from .forms import BroadCastForm
 # Custom Admin View
 class TelegramUserAdmin(ModelAdmin):
     list_display = ("user_id", "first_name", "last_name", "username", "chat_id")
-    change_list_template = "admin/telegram_user_changelist.html"  # Custom template for change list page
+    # change_list_template = "admin/telegram_user_changelist.html"  # Custom template for change list page
 
-    def get_urls(self):
-        from django.urls import path
-        from django.shortcuts import render
-        from django.http import HttpResponseRedirect
+    # def get_urls(self):
+    #     from django.urls import path
+    #     from django.shortcuts import render
+    #     from django.http import HttpResponseRedirect
 
-        urls = super().get_urls()
-        custom_urls = [
-            path("broadcast/", self.admin_site.admin_view(self.broadcast_message_view), name="broadcast_message"),
-        ]
-        return custom_urls + urls
+    #     urls = super().get_urls()
+    #     custom_urls = [
+    #         path("broadcast/", self.admin_site.admin_view(self.broadcast_message_view), name="broadcast_message"),
+    #     ]
+    #     return custom_urls + urls
 
-    def broadcast_message_view(self, request):
-        if request.method == "POST":
-            form = MessageBroadcastForm(request.POST)
-            if form.is_valid():
-                message = form.cleaned_data["message_text"]
-                bot_token = TG_API_TOKEN
-                url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    # def broadcast_message_view(self, request):
+    #     if request.method == "POST":
+    #         form = BroadCastForm(request.POST)
+    #         if form.is_valid():
+    #             message = form.cleaned_data["content"]
+    #             bot_token = TG_API_TOKEN
+    #             url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
 
-                for user in TelegramUser.objects.all():
-                    payload = {
-                        "chat_id": user.chat_id,
-                        "text": message,
-                        "parse_mode": "HTML"
-                    }
-                    try:
-                        response = requests.post(url, json=payload)
-                        if not response.ok:
-                            print(f"Failed to send message to {user.chat_id}: {response.text}")
-                    except Exception as e:
-                        print(f"Error sending message to {user.chat_id}: {e}")
+    #             for user in TelegramUser.objects.all():
+    #                 payload = {
+    #                     "chat_id": user.chat_id,
+    #                     "text": message,
+    #                     "parse_mode": "HTML"
+    #                 }
+    #                 try:
+    #                     response = requests.post(url, json=payload)
+    #                     if not response.ok:
+    #                         print(f"Failed to send message to {user.chat_id}: {response.text}")
+    #                 except Exception as e:
+    #                     print(f"Error sending message to {user.chat_id}: {e}")
 
-                self.message_user(request, "Message broadcasted successfully!")
-                return HttpResponseRedirect("../")
-        else:
-            form = MessageBroadcastForm()
+    #             self.message_user(request, "Message broadcasted successfully!")
+    #             return HttpResponseRedirect("../")
+    #     else:
+    #         form = BroadCastForm()
 
-        context = {
-            "form": form,
-            "opts": self.model._meta,
-            "app_label": self.model._meta.app_label,
-        }
-        return render(request, "admin/broadcast_message.html", context)
+    #     context = {
+    #         "form": form,
+    #         "opts": self.model._meta,
+    #         "app_label": self.model._meta.app_label,
+    #     }
+    #     return render(request, "admin/broadcast_message.html", context)
 
 admin.site.register(TelegramUser, TelegramUserAdmin)
+
+import html
+import re
+
+from django.contrib import admin
+from .models import Broadcast
+
+class BroadcastAdmin(admin.ModelAdmin):
+    list_display = ('id', 'content')  # Display ID and content in the admin list
+    search_fields = ('content',)     # Enable search functionality by content
+    
+    def save_model(self, request, obj, form, change):
+        """
+        Override save_model to send a message to all users when a broadcast is saved.
+        """
+        obj.content = self.remove_tags_and_decode_entities(obj.content)
+        
+        super().save_model(request, obj, form, change)  # Save the Broadcast instance
+        bot_token = TG_API_TOKEN
+        url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+
+        for user in TelegramUser.objects.all():
+            payload = {
+                "chat_id": user.chat_id,
+                "text": obj.content,
+                "parse_mode": "HTML"
+            }
+            try:
+                response = requests.post(url, json=payload)
+                if not response.ok:
+                    self.message_user(request, f"Failed to send message to {user.chat_id}: {response.text}", level="error")
+            except Exception as e:
+                self.message_user(request, f"Error sending message to {user.chat_id}: {e}", level="error")
+
+        self.message_user(request, "Message sent to all users successfully!")
+    def remove_tags_and_decode_entities(self, content):
+        """Removes <p> and <div> tags and decodes HTML entities to normal characters."""
+        # Remove <p> and <div> tags using regex
+        content = re.sub(r'<(p|div)[^>]*>', '', content)  # Remove opening <p> and <div>
+        content = re.sub(r'</(p|div)>', '', content)     # Remove closing </p> and </div>
+        
+        # Decode HTML entities (e.g., &nbsp;, &lt;, &gt;, etc.)
+        content = html.unescape(content)
+        
+        return content
+# Register the model with the admin site
+admin.site.register(Broadcast, BroadcastAdmin)

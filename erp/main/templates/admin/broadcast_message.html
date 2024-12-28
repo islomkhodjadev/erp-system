@@ -1,12 +1,18 @@
 {% extends "admin/base_site.html" %}
 
-{% block content %}
-  <h1>Broadcast Message</h1>
-  <form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="default">Send Message</button>
-  </form>
-  <br>
-  <a href="../">Back to TelegramUser list</a>
+
+
+{% block header %}
+    {{ form.media }} # Required for styling/js to make ckeditor5 work
 {% endblock %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit article">
+    </form>
+
+
+
+{% endblock %}
+

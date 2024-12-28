@@ -270,3 +270,14 @@ class TelegramUser(models.Model):
     chat_first_name = models.CharField(max_length=256, null=True, blank=True)
     chat_last_name = models.CharField(max_length=256, null=True, blank=True)
     chat_is_forum = models.BooleanField(null=True, blank=True)
+
+
+
+from django.db import models
+from django_ckeditor_5.fields import CKEditor5Field
+
+class Broadcast(models.Model):
+    content = CKEditor5Field('Message Content', config_name='broadcast')
+
+    def __str__(self):
+        return self.content[:50]  # Display the first 50 characters

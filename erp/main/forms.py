@@ -209,3 +209,24 @@ def process_order(form, language="ru"):
         return {"status": "success", "message": success_message, "user_id": user_id}
     
     return {"status": "error"}
+
+
+
+
+
+from django import forms
+
+from django_ckeditor_5.widgets import CKEditor5Widget
+from .models import Broadcast
+
+
+class BroadCastForm(forms.ModelForm):
+
+    class Meta:
+        model = Broadcast
+        fields = ("content",)
+        widgets = {
+            "content": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"}, config_name="comment"
+            )
+        }
