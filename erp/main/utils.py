@@ -413,8 +413,8 @@ def create_or_update_user_data(user_data_list):
             id_user=user_data.profile.id_user,
             defaults={
                 "name": user_data.name,
-                'telegram_id': user_data.profile.telegram_id,
-                'telegram_username': user_data.profile.telegram_username,
+                # 'telegram_id': user_data.profile.telegram_id,
+                # 'telegram_username': user_data.profile.telegram_username,
                 'password': user_data.profile.password,
                 'language': user_data.profile.language,
                 'is_loggined': user_data.profile.is_loggined,
