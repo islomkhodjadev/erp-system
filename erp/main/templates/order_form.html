@@ -6,15 +6,16 @@
     <title>{{order_plintus_form}}</title>
     <style>
        body {
-    font-family: Arial, sans-serif;
-    background-color: var(--tg-theme-bg-color, #f4f4f9);
-    color: var(--tg-theme-text-color, #000000);
-    margin: 0;
-    padding: 20px;
-    height: 100vh;
-    overflow-y: auto;
-    box-sizing: border-box;
-}
+            font-family: Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #f4f4f9);
+            color: var(--tg-theme-text-color, #000000);
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            width: 100%;
+            box-sizing: border-box;
+        }
 
         h2 {
             text-align: center;
@@ -23,12 +24,13 @@
 
         .order-form {
             background-color: var(--tg-theme-secondary-bg-color, #ffffff);
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 1200px;
-            margin: 0 auto;
             width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
         }
 
         .order-row {
@@ -135,29 +137,33 @@
         }
 
         @media (max-width: 768px) {
-            .order-row {
-                flex-direction: column;
-                align-items: stretch;
-                padding-bottom: 40px;
-            }
-            body {
-                    padding: 10px;
-                }
-                
             .order-form {
-                    padding: 10px;
-                }
-            
+                padding: 10px;
+                margin: 0;
+                border-radius: 8px;
+            }
 
             .form-group {
                 width: 100%;
+                min-width: auto;
             }
 
             .form-group input,
             .form-group select {
                 width: 100%;
+                box-sizing: border-box;
             }
-
+            .order-row {
+                flex-direction: column;
+                align-items: stretch;
+                padding-bottom: 40px;
+            }
+            
+            body {
+                    padding: 10px;
+                }
+                
+            
             .remove-row {
                 bottom: 10px;
                 top: auto;
