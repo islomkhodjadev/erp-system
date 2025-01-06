@@ -186,7 +186,7 @@ def send_message_to_telegram(chat_id, message):
     response = requests.post(url, data=data)
 
     if response.status_code != 200:
-        print(f"Failed to send message. Status code: {response.status_code}")
+        print(f"Failed to send message. Status code: {response.json()}")
     else:
         print(f"Message sent to chat ID {chat_id}")
 
@@ -445,7 +445,7 @@ def create_or_update_user_data(user_data_list):
 
 
 
-    import pandas as pd
+import pandas as pd
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 

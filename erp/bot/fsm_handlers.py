@@ -68,35 +68,37 @@ async def process_password(message: Message, state: FSMContext) -> None:
             "Пожалуйста, введите ваш пароль 🔑",
         )
     else:
+        # Save the password
         await state.update_data(password=message.text)
         
         data = await state.get_data()
         
-        
+        # Authenticate the user
         status = await authenticate_user(data["username"], data["password"], message.from_user.id, message.from_user.username)
-        if (status == METHOOD_STATUS.SUCCESSFUL):
+        
+        if status == METHOOD_STATUS.SUCCESSFUL:
             await message.answer(
-            "Iltimos, tilni tanlang\n"
-            "Пожалуйста, выберите язык", reply_markup=inlines.generate_choose_language_button())
-
-
-        elif (status == METHOOD_STATUS.BLOCKED):
+                "Iltimos, tilni tanlang\n"
+                "Пожалуйста, выберите язык", reply_markup=inlines.generate_choose_language_button())
+            await state.clear()  # Clear the state once the login is successful
+        elif status == METHOOD_STATUS.BLOCKED:
             await message.answer(
                 "Siz bloklanganingiz uchun kirish mumkin emas. Iltimos, qo'llab-quvvatlash bilan bog'laning. ❌"
                 "Вы заблокированы, и вход невозможен. Пожалуйста, свяжитесь с поддержкой. ❌"
             )
-        elif (status == METHOOD_STATUS.INVALID):
-            await message.answer("Parol noto‘g‘ri."
-                "Пароль неверный.")
-        elif (status == METHOOD_STATUS.NOTFOUND):
-            await message.answer("Profile mavjud emas."
-                     "Профиль не существует.")
-
-
-        await state.clear()
+            await state.clear()  # Clear the state if blocked
+        elif status == METHOOD_STATUS.INVALID:
+            await message.answer(
+                "Parol noto‘g‘ri. Iltimos, qayta urinib ko'ring. 🔑"
+                "Пароль неверный. Пожалуйста, попробуйте снова. 🔑"
+            )
+        elif status == METHOOD_STATUS.NOTFOUND:
+            await message.answer(
+                "Profile mavjud emas."
+                "Профиль не существует."
+            )
+            await state.clear()  # Clear the state if the profile is not found
         await message.delete()
-
-
 from aiogram.methods.send_message import SendMessage
 
 @fsm_handlers.message(Support.message)

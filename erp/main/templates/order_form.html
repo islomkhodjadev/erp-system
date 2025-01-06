@@ -5,293 +5,455 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{order_plintus_form}}</title>
     <style>
-       body {
-    font-family: Arial, sans-serif;
-    background-color: var(--tg-theme-bg-color, #f4f4f9);
-    color: var(--tg-theme-text-color, #000000);
-    margin: 0;
-    padding: 20px;
-}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color, #f4f4f9);
+            color: var(--tg-theme-text-color, #000000);
+            margin: 0;
+            padding: 20px;
+        }
 
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-.order-form {
-    background-color: var(--tg-theme-secondary-bg-color, #ffffff);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto;
-    width: 100%;
-}
+        .order-form {
+            background-color: var(--tg-theme-secondary-bg-color, #ffffff);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-.order-form label {
-    display: block;
-    margin: 10px 0 5px;
-    color: var(--tg-theme-hint-color, #666666);
-}
+        .order-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #cccccc);
+            position: relative;
+        }
 
-.order-form input,
-.order-form select {
-    width: 120px;
-    padding: 10px;
-    margin: 5px 0 15px;
-    border-radius: 5px;
-    text-align: center;
-    box-sizing: border-box;
-    font-size: 18px;
-    border: 1px solid var(--tg-theme-hint-color, #cccccc);
-    background-color: var(--tg-theme-bg-color, #f4f4f9);
-    color: var(--tg-theme-text-color, #000000);
-}
+        .order-row:last-child {
+            border-bottom: none;
+        }
 
-.order-form input:focus,
-.order-form select:focus {
-    outline: none;
-   
-}
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 120px;
+        }
 
-input.valid {
-    border-color: green;
-}
+        .form-group label {
+            color: var(--tg-theme-hint-color, #666666);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
 
-input.invalid {
-    border-color: red;
-}
+        .form-group input,
+        .form-group select {
+            width: 120px;
+            padding: 8px;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid var(--tg-theme-hint-color, #cccccc);
+            background-color: var(--tg-theme-bg-color, #f4f4f9);
+            color: var(--tg-theme-text-color, #000000);
+            font-size: 16px;
+            outline: none;
+        }
 
-button {
-    padding: 10px 20px;
-    background-color: var(--tg-theme-button-color, #28a745);
-    color: var(--tg-theme-button-text-color, #ffffff);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 15px;
-    width: 100%;
-    box-sizing: border-box;
-}
+        .remove-row {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-button:hover {
-    background-color: var(--tg-theme-link-color, #218838);
-}
+        .valid {
+            border-color: green !important;
+        }
 
-button:disabled {
-    background-color: var(--tg-theme-hint-color, #cccccc);
-    cursor: not-allowed;
-}
+        .invalid {
+            border-color: red !important;
+        }
 
-/* Popup styling */
-.popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-}
+        .row-total {
+            font-weight: bold;
+            min-width: 100px;
+        }
 
-.popup-content {
-    background-color: var(--tg-theme-secondary-bg-color, #ffffff);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    width: 80%;
-    max-width: 400px;
-}
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
 
-.popup select {
-    padding: 10px;
-    margin: 10px 0;
-    width: 100%;
-    background-color: var(--tg-theme-bg-color, #f4f4f9);
-    color: var(--tg-theme-text-color, #000000);
-}
+        .add-row {
+            background-color: var(--tg-theme-button-color, #28a745);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
 
-.popup button {
-    margin-top: 10px;
-}
+        .submit-form {
+            background-color: var(--tg-theme-button-color, #0088cc);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-    .order-form {
-        padding: 15px;
-    }
+        .total-price {
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 2px solid var(--tg-theme-hint-color, #cccccc);
+        }
 
-    button {
-        width: 100%;
-    }
+        @media (max-width: 768px) {
+            .order-row {
+                flex-direction: column;
+                align-items: stretch;
+                padding-bottom: 40px;
+            }
 
-    .popup-content {
-        width: 90%;
-    }
-}
+            .form-group {
+                width: 100%;
+            }
 
+            .form-group input,
+            .form-group select {
+                width: 100%;
+            }
+
+            .remove-row {
+                bottom: 10px;
+                top: auto;
+                right: 10px;
+                transform: none;
+            }
+        }
     </style>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 </head>
 <body>
     <h2>{{order_plintus_form}}</h2>
 
-    <!-- Order Form -->
-    <form method="POST" class="order-form">
+    <form method="POST" class="order-form" id="plintusOrderForm">
         {% csrf_token %}
-        {{ form }}
-        <div id="codePopup" class="popup">
-            <div class="popup-content">
-                <h3>{{choose_plintus}}:</h3>
-                <select id="codeSelect" onchange="updateCode()">
-                    {% for plintus in plintus_list %}
-                    <option value="{{ plintus.code }}" data-price="{{ plintus.price }}" data-stock="{{ plintus.count_in_packs }}">
-                        {{ plintus.code }} 
-                    </option>
-                    {% endfor %}
-                </select>
-                <button type="button" onclick="closeCodePopup()">{{close}}</button>
-            </div>
+        <input type="hidden" id="user_id" name="user_id" value="">
+        <div id="orderRows"></div>
+        
+        <div class="total-price">
+            {{total_price}}: <span id="grandTotal">0.0</span> $
         </div>
-        <p>{{total_price}}: <span id="totalPrice">0.0</span> $</p>
-
-        <input type="submit" value="{{submit}}">
-        <button type="reset">{{clean}}</button>
+        
+        <div class="actions">
+            <button type="button" class="add-row">+ Add Order</button>
+            <button type="submit" class="submit-form">{{submit}}</button>
+        </div>
     </form>
 
-<script>
+    <script>
 
-    
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            let orderRowCounter = 0;
+            const plintusData = JSON.parse('{{ plintus_list | escapejs }}');
 
-        const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+            function createOrderRow() {
+                const rowId = `row-${orderRowCounter++}`;
+                const row = document.createElement('div');
+                row.className = 'order-row';
+                row.id = rowId;
+
+                row.innerHTML = `
+                    <div class="form-group">
+                        <label>{{ plintus_code }}</label>
+                        <select name="plintus_code[]" onchange="handleSelectChange(event, '${rowId}')" required>
+                            <option value="">{{ choose_plintus }}</option>
+                            ${plintusData.map(p => `
+                                <option value="${p.code}" 
+                                    data-price="${p.price}" 
+                                    data-stock="${p.count_in_packs}">
+                                    ${p.code}
+                                </option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ number_of_plintus }}</label>
+                        <input type="number" name="number_of_plintus[]" 
+                            min="0" value="0" 
+                            oninput="handleInputChange(event, '${rowId}')">
+                    </div>
+                    <div class="form-group">
+                        <label>{{ vnutrenniy_ugol }}</label>
+                        <input type="number" name="vnutrenniy_ugol[]" 
+                            min="0" value="0" 
+                            oninput="handleInputChange(event, '${rowId}')">
+                    </div>
+                    <div class="form-group">
+                        <label>{{ naruzhniy_ugol }}</label>
+                        <input type="number" name="naruzhniy_ugol[]" 
+                            min="0" value="0" 
+                            oninput="handleInputChange(event, '${rowId}')">
+                    </div>
+                    <div class="form-group">
+                        <label>{{ zaglushka_levaya }}</label>
+                        <input type="number" name="zaglushka_levaya[]" 
+                            min="0" value="0" 
+                            oninput="handleInputChange(event, '${rowId}')">
+                    </div>
+                    <div class="form-group">
+                        <label>{{ zaglushka_pravaya }}</label>
+                        <input type="number" name="zaglushka_pravaya[]" 
+                            min="0" value="0" 
+                            oninput="handleInputChange(event, '${rowId}')">
+                    </div>
+                    <div class="form-group">
+                        <label>{{ soedinitel }}</label>
+                        <input type="number" name="soedinitel[]" 
+                            min="0" value="0" 
+                            oninput="handleInputChange(event, '${rowId}')">
+                    </div>
+                    <div class="row-total">
+                        Total: <span>0.0</span> $
+                    </div>
+                    <button type="button" class="remove-row" onclick="removeRow('${rowId}')">×</button>
+                `;
+                return row;
+            }
+
+            function addOrderRow() {
+                const orderRows = document.getElementById('orderRows');
+                orderRows.appendChild(createOrderRow());
+            }
+
+            document.querySelector('.add-row').addEventListener('click', addOrderRow);
+
+            addOrderRow();
+
+            const initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
             const user = initDataUnsafe.user;
-            const userId = user ? user.id : "";
 
-            if (userId) {
-                // Set the user_id hidden input value
-                document.getElementById('user_id').value = userId;
+            if (user && user.id) {
+                document.getElementById('user_id').value = user.id;
             } else {
-                console.error('User ID not available');
-            }
-        const status = "{{ status }}";
-        console.log(status);
-        // This will get the value from Django context
-            if (status === 'true' || status == "True") {
-                // If status is true (order is successful), close the Telegram Web App
+                // If there's no user or user ID, close the Telegram Web App
+                alert('User ID not found. The application will now close.');
                 window.Telegram.WebApp.close();
-                
             }
-            
-     // Global variable to store the selected Plintus and its components
-let selectedPlintus = null;
-let components = [];
 
-function openCodePopup() {
-    document.getElementById('codePopup').style.display = 'flex';
-}
-
-function closeCodePopup() {
-    document.getElementById('codePopup').style.display = 'none';
-    const select = document.getElementById('codeSelect');
-    const selectedOption = select.options[select.selectedIndex];
-    document.getElementById('plintusCode').value = selectedOption.value;  // Update input to only show code
-    fetchPlintusComponents(selectedOption);  // Fetch components and update price when code is selected
-}
-
-function updateCode() {
-    const select = document.getElementById('codeSelect');
-    const selectedOption = select.options[select.selectedIndex];
-    document.getElementById('plintusCode').value = selectedOption.value;  // Update input to only show code
-    fetchPlintusComponents(selectedOption);  // Fetch components and update price when code is selected
-}
-
-function fetchPlintusComponents(plintusCode) {
-    console.log(plintusCode);
-    const apiUrl = `/erp/get_plintus_component/${plintusCode.value}/`; // Replace with your actual API endpoint
-
-    fetch(apiUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json(); // Parse the JSON response
-      })
-      .then((data) => {
-        console.log("Plintus Components:", data);
-
-        // Store the selected Plintus and its components globally
-        selectedPlintus = data.plintus;
-        components = data.components;
-
-        // Display components and initialize input fields
-        components.forEach((component) => {
-            document.getElementById(component.code).value = 0;  // Reset input value
-            console.log(
-                `Type: ${component.type}, Code: ${component.code}, Price: ${component.price}, Packs: ${component.count_in_packs}`
-            );
         });
 
-        // Recalculate the total price
-        calculateTotal();
-      })
-      .catch((error) => {
-        console.error(`Fetch error: ${error.message}`);
-      });
-}
-
-
-function validateInput(input, componentType) {
-    
-    const component = components.find((comp) => comp.type === componentType);
-    let maxCount = component ? component.count_in_packs : 0;
-
-    // If it's the plintus quantity field, we need to handle it differently
-    if (componentType === 'plintus') {
-        maxCount = selectedPlintus ? selectedPlintus.count_in_packs : 0;
-    }
-
-    const inputValue = parseInt(input.value, 10);
-
-    // Check if the input value exceeds the available packs
-    if (inputValue > maxCount) {
-        input.classList.remove("valid");
-        input.classList.add("invalid");
-    } else {
-        input.classList.remove("invalid");
-        input.classList.add("valid");
-    }
-}
-
-function calculateTotal() {
-    let totalPrice = 0;
-
-    // Get the quantity of Plintus (numberOfPlintus)
-    const plintusQuantity = parseInt(document.getElementById("numberOfPlintus").value, 10) || 0;  // Default to 0 if invalid
-    
-    // Check if the selected plintus exists and its price is available
-    if (selectedPlintus && selectedPlintus.price) {
-        // Add the price of the selected plintus multiplied by the quantity
-        totalPrice += selectedPlintus.price * plintusQuantity;
-    }
-
-    // Loop over the components and add their price multiplied by the input value
-    components.forEach((component) => {
-        const componentQuantity = parseInt(document.getElementById(component.type).value, 10) || 0;  // Default to 0 if invalid
-        if (component.price) { // Check if the component has a price
-            totalPrice += component.price * componentQuantity;
+        async function handleSelectChange(event, rowId) {
+            const plintusCode = event.target.value;
+            try {
+                const response = await fetch(`/erp/get_plintus_component/${plintusCode}/`);
+                const data = await response.json();
+                
+                const row = document.getElementById(rowId);
+                
+                row.dataset.components = JSON.stringify(data.components);
+                row.dataset.plintus = JSON.stringify(data.plintus);
+                console.log(row);
+                validateRowInputs(rowId);
+                calculateRowTotal(rowId);
+            } catch (error) {
+                console.error('Error fetching components:', error);
+            }
         }
+
+        function handleInputChange(event, rowId) {
+            validateRowInputs(rowId);
+            calculateRowTotal(rowId);
+        }
+
+        function removeRow(rowId) {
+            document.getElementById(rowId).remove();
+            calculateGrandTotal();
+        }
+
+        function validateRowInputs(rowId) {
+            const row = document.getElementById(rowId);
+            const components = JSON.parse(row.dataset.components || '[]');
+            console.log(components);
+            const plintus = JSON.parse(row.dataset.plintus || '{}');
+            
+            const plintusInput = row.querySelector('input[name="number_of_plintus[]"]');
+            validateInput(plintusInput, plintus.count_in_packs);
+            
+            components.forEach(component => {
+                const input = row.querySelector(`input[name="${component.type}[]"]`);
+                validateInput(input, component.count_in_packs);
+            });
+        }
+
+        function validateInput(input, maxCount) {
+            if (!input || maxCount === undefined) return;
+            
+            const value = parseInt(input.value) || 0;
+            if (value > maxCount) {
+                input.classList.remove('valid');
+                input.classList.add('invalid');
+            } else {
+                input.classList.remove('invalid');
+                input.classList.add('valid');
+            }
+        }
+
+        function calculateRowTotal(rowId) {
+            const row = document.getElementById(rowId);
+            const components = JSON.parse(row.dataset.components || '[]');
+            const plintus = JSON.parse(row.dataset.plintus || '{}');
+            
+            let total = 0;
+            
+            const plintusQty = parseInt(row.querySelector('input[name="number_of_plintus[]"]').value) || 0;
+            total += plintusQty * (plintus.price || 0);
+            
+            components.forEach(component => {
+                const qty = parseInt(row.querySelector(`input[name="${component.type}[]"]`).value) || 0;
+                total += qty * component.price;
+            });
+            
+            row.querySelector('.row-total span').textContent = total.toFixed(2);
+            calculateGrandTotal();
+        }
+
+        function calculateGrandTotal() {
+            const rows = document.querySelectorAll('.order-row');
+            let grandTotal = 0;
+            
+            rows.forEach(row => {
+                const rowTotal = parseFloat(row.querySelector('.row-total span').textContent);
+                grandTotal += rowTotal;
+            });
+            
+            document.getElementById('grandTotal').textContent = grandTotal.toFixed(2);
+        }
+
+        document.getElementById('plintusOrderForm').onsubmit = function(e) {
+    e.preventDefault();
+    
+    const invalidInputs = document.querySelectorAll('.invalid');
+    if (invalidInputs.length > 0) {
+        alert('Please correct the quantities marked in red');
+        return false;
+    }
+
+    // Create an array to hold all rows' data
+    const orderData = [];
+
+    // Collect data for each row
+    document.querySelectorAll('.order-row').forEach(row => {
+        const plintusCode = row.querySelector('select[name="plintus_code[]"]').value;
+        const numberOfPlintus = row.querySelector('input[name="number_of_plintus[]"]').value;
+        const vnutrenniyUgol = row.querySelector('input[name="vnutrenniy_ugol[]"]').value;
+        const naruzhniyUgol = row.querySelector('input[name="naruzhniy_ugol[]"]').value;
+        const zaglushkaLevaya = row.querySelector('input[name="zaglushka_levaya[]"]').value;
+        const zaglushkaPravaya = row.querySelector('input[name="zaglushka_pravaya[]"]').value;
+        const soedinitel = row.querySelector('input[name="soedinitel[]"]').value;
+
+        // Push row data as an object to the array
+        orderData.push({
+            plintus_code: plintusCode,
+            number_of_plintus: numberOfPlintus,
+            vnutrenniy_ugol: vnutrenniyUgol,
+            naruzhniy_ugol: naruzhniyUgol,
+            zaglushka_levaya: zaglushkaLevaya,
+            zaglushka_pravaya: zaglushkaPravaya,
+            soedinitel: soedinitel
+        });
     });
+    console.log(orderData);
+            fetch('/erp/order/ru/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value
+            },
+            body: JSON.stringify({
+                user_id: document.getElementById('user_id').value,
+                order_data: orderData
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                // If the response is not OK (status code is not 2xx), parse and throw the error
+                return response.json().then(err => {
+                    const errorMessages = parseErrorMessages(err.errors || err);
+                    throw new Error(errorMessages);
+                });
+            }
+            return response.json(); // Parse the successful JSON response
+        })
+        .then(data => {
+            // Handle successful response
+            console.log('Order placed successfully:', data);
+            alert('Order submitted successfully!');
 
-    // Update total price in the UI
-    document.getElementById("totalPrice").textContent = totalPrice.toFixed(2);
-}
+            // Close the Telegram Web App
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.close();
+            } else {
+                console.error('Telegram WebApp API not available.');
+            }
+        })
+        .catch(error => {
+            // Handle network errors or HTTP errors
+            console.error('Error submitting order:', error.message);
+            alert(`An error occurred: ${error.message}`);
+        });
 
+        /**
+         * Parse error messages from the server response into a user-friendly string.
+         * @param {Object} errors - The error object from the server response.
+         * @returns {string} - A formatted string with error details.
+         */
+        function parseErrorMessages(errors) {
+            if (typeof errors !== 'object' || errors === null) return 'An unknown error occurred.';
 
+            const errorMessages = [];
+            for (const [field, messages] of Object.entries(errors)) {
+                if (Array.isArray(messages)) {
+                    messages.forEach(msg => {
+                        errorMessages.push(`${field}: ${msg}`);
+                    });
+                } else {
+                    errorMessages.push(`${field}: ${messages}`);
+                }
+            }
+            return errorMessages.join('\n');
+        }
+        
+
+};
 
     </script>
+
 </body>
 </html>
