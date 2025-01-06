@@ -33,8 +33,8 @@ def order_view(request, language):
         user_id = data.get('user_id')
         order_data = data.get('order_data', [])
         
-        # if not user_id:
-        #     return JsonResponse({"status": "error", "message": "User ID is required."}, status=400)
+        if not user_id:
+            return JsonResponse({"status": "error", "message": "User ID is required."}, status=400)
 
         # Initialize the final message and total price for the order
         errors = {}
@@ -74,9 +74,8 @@ def order_view(request, language):
 
             # Send the final message to the user (via Telegram or another method)
             try:
-                print(final_message)
-                # Replace '1099766821' with user_id or profile.telegram_id as needed
-                send_message_to_telegram("1099766821", final_message)  # Send the message to the user
+                # Replace '' with user_id or profile.telegram_id as needed
+                inform_order_user_gorup(user_id, final_message)  # Send the message to the user
             except Profile.DoesNotExist:
                 return JsonResponse({"status": "error", "message": "Telegram ID not found for the user."}, status=400)
 
@@ -108,6 +107,7 @@ def order_view(request, language):
         "zaglushka_levaya": translate(language, "zaglushka_levaya"),
         "zaglushka_pravaya": translate(language, "zaglushka_pravaya"),
         "soedinitel": translate(language, "soedinitel"),
+        "add_order": translate(language, "add_order")
     })
 
 # View to fetch the components related to a specific Plintus by its code

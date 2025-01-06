@@ -98,6 +98,7 @@ class OrderForm(forms.Form):
         self.fields['plintus_code'].choices = plintus_choices
 
 # Translation dictionary where the language code is the key, and inside it we have the translated terms.
+
 TRANSLATIONS = {
     "ru": {
         "order_plintus_form": "Форма заказа Плинтуса",
@@ -117,7 +118,8 @@ TRANSLATIONS = {
         "naruzhniy_ugol": "Наружный угол",
         "zaglushka_levaya": "Заглушка левая",
         "zaglushka_pravaya": "Заглушка правая",
-        "soedinitel": "Соединитель"
+        "soedinitel": "Соединитель",
+        "add_order": "Добавить плинтус"  # Added translation for 'add_order'
     },
     "uz": {
         "order_plintus_form": "Plintus buyurtma formasi",
@@ -137,7 +139,8 @@ TRANSLATIONS = {
         "naruzhniy_ugol": "Tashqi burchak",
         "zaglushka_levaya": "Chap zaglushka",
         "zaglushka_pravaya": "O'ng zaglushka",
-        "soedinitel": "Birlashtiruvchi"
+        "soedinitel": "Birlashtiruvchi",
+        "add_order": "Plintus qo'shish"  # Added translation for 'add_order'
     }
 }
 
