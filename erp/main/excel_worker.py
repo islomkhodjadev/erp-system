@@ -174,8 +174,8 @@ def process_sheets(sheet_dfs):
         profile = ProfileData(
 
             id_user=user_id,
-            # telegram_id=f"",
-            # telegram_username=f"",
+            telegram_id=f"",
+            telegram_username=f"",
             password=password,
             language="uz",
             is_loggined=False,

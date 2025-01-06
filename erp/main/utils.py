@@ -100,104 +100,6 @@ def extract_process_and_combine_sheets(excel_file, sheet_names):
         return pd.DataFrame()  # Return an empty DataFrame in case of error
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import os
-import django
-import sys
-from dotenv import load_dotenv
-import requests
-
-# Load environment variables from .env file
-load_dotenv()
-from .models import Profile, Chats
-# Use your bot token from .env
-API_TOKEN = os.getenv("tg_token")
-
-
-
-def inform_order_user_gorup(user_id, message):
-    """
-    Function to send a message to both a user and a group chat (like an 'order' chat) via the Telegram Bot API.
-    
-    Args:
-    - user_id (str): The Telegram user ID.
-    - message (str): The message to be sent.
-    - group_chat_id (str): The ID of the group chat (e.g., 'order' chat).
-    
-    Returns:
-    - str: Confirmation or error message.
-    """
-    try:
-
-        # Fetch the user's username from the Profile model (assuming Profile model exists)
-        group_chat_id = Chats.get_chat_id_by_type("order")
-
-        profile = Profile.objects.get(telegram_id=user_id)  # Fetch profile based on the user_id
-        user_username = profile.telegram_username if profile.telegram_username else "User"
-
-        # Send message to the individual user
-        send_message_to_telegram(user_id, message)
-        
-        group_message = f"Новый заказ от @{user_username} {profile.name if profile.name else ''}\nYangi buyurtma @{user_username} {profile.name if profile.name else ''}:\n\n{message}"
-
-
-        # Send message to the group chat
-        send_message_to_telegram(group_chat_id, group_message)
-
-        return "Message sent to both user and group chat."
-    
-    except Profile.DoesNotExist:
-        return "User profile not found."
-    except Exception as e:
-        return f"An error occurred: {str(e)}"
-
-
-def send_message_to_telegram(chat_id, message):
-    
-    """
-    Helper function to send a message via Telegram Bot API.
-    
-    Args:
-    - chat_id (str): The Telegram ID of the user or group chat.
-    - message (str): The message to be sent.
-    """
-    url = f"https://api.telegram.org/bot{API_TOKEN}/sendMessage"
-    data = {
-        'chat_id': chat_id,
-        'text': message,
-        "parse_mode": "HTML"
-    }
-
-    # Send the message via Telegram Bot API
-    response = requests.post(url, data=data)
-
-    if response.status_code != 200:
-        print(f"Failed to send message. Status code: {response.json()}")
-    else:
-        print(f"Message sent to chat ID {chat_id}")
-
-
-
-
-
-
-
-
-
 from dataclasses import dataclass
 from decimal import Decimal
 from datetime import date
@@ -268,6 +170,7 @@ def extract_all_sheets_to_dfs(excel_file):
         return sheet_dfs
     except Exception as e:
         return {}
+    
 def process_sheets_to_userdata(sheet_dfs):
     user_data_list = []
 
@@ -413,8 +316,8 @@ def create_or_update_user_data(user_data_list):
             id_user=user_data.profile.id_user,
             defaults={
                 "name": user_data.name,
-                'telegram_id': user_data.profile.telegram_id,
-                'telegram_username': user_data.profile.telegram_username,
+                # 'telegram_id': user_data.profile.telegram_id,
+                # 'telegram_username': user_data.profile.telegram_username,
                 'password': user_data.profile.password,
                 'language': user_data.profile.language,
                 'is_loggined': user_data.profile.is_loggined,
@@ -545,3 +448,90 @@ def save_price_list_to_model(sheet_dfs):
                     'price_accessory_per_pack': item.price_accessory_per_pack,
                 }
             )
+
+
+
+
+
+
+
+
+
+
+
+
+
+import os
+import django
+import sys
+from dotenv import load_dotenv
+import requests
+
+# Load environment variables from .env file
+load_dotenv()
+from .models import Profile, Chats
+# Use your bot token from .env
+API_TOKEN = os.getenv("tg_token")
+
+
+
+def inform_order_user_gorup(user_id, message):
+    """
+    Function to send a message to both a user and a group chat (like an 'order' chat) via the Telegram Bot API.
+    
+    Args:
+    - user_id (str): The Telegram user ID.
+    - message (str): The message to be sent.
+    - group_chat_id (str): The ID of the group chat (e.g., 'order' chat).
+    
+    Returns:
+    - str: Confirmation or error message.
+    """
+    try:
+
+        # Fetch the user's username from the Profile model (assuming Profile model exists)
+        group_chat_id = Chats.get_chat_id_by_type("order")
+
+        profile = Profile.objects.get(telegram_id=user_id)  # Fetch profile based on the user_id
+        user_username = profile.telegram_username if profile.telegram_username else "User"
+
+        # Send message to the individual user
+        send_message_to_telegram(user_id, message)
+        
+        group_message = f"Новый заказ от @{user_username} {profile.name if profile.name else ''}\nYangi buyurtma @{user_username} {profile.name if profile.name else ''}:\n\n{message}"
+
+
+        # Send message to the group chat
+        send_message_to_telegram(group_chat_id, group_message)
+
+        return "Message sent to both user and group chat."
+    
+    except Profile.DoesNotExist:
+        return "User profile not found."
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+
+
+def send_message_to_telegram(chat_id, message):
+    
+    """
+    Helper function to send a message via Telegram Bot API.
+    
+    Args:
+    - chat_id (str): The Telegram ID of the user or group chat.
+    - message (str): The message to be sent.
+    """
+    url = f"https://api.telegram.org/bot{API_TOKEN}/sendMessage"
+    data = {
+        'chat_id': chat_id,
+        'text': message,
+        "parse_mode": "HTML"
+    }
+
+    # Send the message via Telegram Bot API
+    response = requests.post(url, data=data)
+
+    if response.status_code != 200:
+        print(f"Failed to send message. Status code: {response.json()}")
+    else:
+        print(f"Message sent to chat ID {chat_id}")
