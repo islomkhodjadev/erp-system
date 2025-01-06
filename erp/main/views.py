@@ -107,7 +107,8 @@ def order_view(request, language):
         "zaglushka_levaya": translate(language, "zaglushka_levaya"),
         "zaglushka_pravaya": translate(language, "zaglushka_pravaya"),
         "soedinitel": translate(language, "soedinitel"),
-        "add_order": translate(language, "add_order")
+        "add_order": translate(language, "add_order"),
+        "language": language
     })
 
 # View to fetch the components related to a specific Plintus by its code
