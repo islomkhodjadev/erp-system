@@ -153,8 +153,8 @@ from .utils import use_debt_save  # Import your Excel processing function
 from .excel_worker import usage_debt
         
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('id_user', 'telegram_id', 'telegram_username', 'language', 'is_loggined', 'is_blocked')
-    search_fields = ('id_user', 'telegram_username', 'telegram_id')
+    list_display = ('name', 'telegram_id', 'telegram_username', 'language', 'is_loggined', 'is_blocked')
+    search_fields = ('name', 'telegram_username', 'telegram_id')
     change_list_template = "admin/profile_changelist.html"  # Custom template for list view
 
     def get_urls(self):
