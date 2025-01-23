@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-b9q#nn1m#k1p!7+8snx^00^gwk)j0qxv4*#*emxrprpxr-+1!h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["ringai.uz", "www.ringai.uz", "127.0.0.1"]
+ALLOWED_HOSTS = ["winart.uz", "www.winart.uz", "127.0.0.1"]
 
 # Application definition
 

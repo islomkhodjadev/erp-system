@@ -13,6 +13,6 @@ def generate_choose_language_button():
 
 def generate_open_order_button(language):
     keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[[InlineKeyboardButton(text=translations[language]["order_form"], web_app=WebAppInfo(url=f"https://ringai.uz/erp/order/{language}/"))]]
+        inline_keyboard=[[InlineKeyboardButton(text=translations[language]["order_form"], web_app=WebAppInfo(url=f"https://winart.uz/erp/order/{language}/"))]]
     )
     return keyboard
