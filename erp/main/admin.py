@@ -152,10 +152,18 @@ from .forms import ExcelUploadForm
 from .utils import use_debt_save  # Import your Excel processing function
 from .excel_worker import usage_debt
         
+
+from django.db import models
+
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('name', 'telegram_id', 'telegram_username', 'language', 'is_loggined', 'is_blocked')
+    list_display = ('name', 'telegram_id', 'telegram_username', 'language', 'is_loggined', 'is_blocked', 'remaining_balance')
     search_fields = ('name', 'telegram_username', 'telegram_id')
     change_list_template = "admin/profile_changelist.html"  # Custom template for list view
+    def remaining_balance(self, obj):
+        # Calculate the sum of remaining balances for all debts related to this user
+        total_remaining = obj.debts.aggregate(total=models.Sum('remaining_balance'))['total']
+        return round(total_remaining, 2) if total_remaining else 0.00
+    remaining_balance.short_description = 'Остаток долга'
 
     def get_urls(self):
         urls = super().get_urls()
@@ -191,6 +199,7 @@ class ProfileAdmin(admin.ModelAdmin):
         return render(request, 'admin/upload_excel.html', context)
 
 admin.site.register(Profile, ProfileAdmin)
+
 
 
 
