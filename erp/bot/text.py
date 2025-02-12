@@ -1,27 +1,26 @@
 translations = {
     "uz": {
         "order_form": "🛒 Plintus buyurtma berish",
-"debts": "💳 Qarzdorliklar",
-"contacts": "📞 Kontaktlar",
-"location": "📍 Joylashuv",
-"support": "💬 Qo'llab-quvvatlash",
-"price": "💵 Narx",
-"see_profile": "👤 Profilni ko'rish",
-"change_language": "🌐 Tilni o'zgartirish",
-"logout": "🚪 Chiqish",
-        "debt_overview": 
-    "💰 <b>@{username} uchun qarz haqida ma'lumot</b>:\n"
-    "📌 <b>Jami qarz olingan:</b> ${total_borrowed:,.2f}\n"
-    "✅ <b>Jami to'langan:</b> ${total_paid:,.2f}\n"
-    "❗ <b>Qarz qoldig'i:</b> ${remaining_balance:,.2f}\n",
+        "debts": "💳 Qarzdorliklar",
+        "contacts": "📞 Kontaktlar",
+        "location": "📍 Joylashuv",
+        "support": "💬 Qo'llab-quvvatlash",
+        "price": "💵 Narx",
+        "see_profile": "👤 Profilni ko'rish",
+        "change_language": "🌐 Tilni o'zgartirish",
+        "logout": "🚪 Chiqish",
+        "debt_overview": "💰 <b>@{username} uchun qarz haqida ma'lumot</b>:\n"
+        "📌 <b>Jami qarz olingan:</b> ${total_borrowed:,.2f}\n"
+        "✅ <b>Jami to'langan:</b> ${total_paid:,.2f}\n"
+        "❗ <b>Qarz qoldig'i:</b> ${remaining_balance:,.2f}\n",
         "profile_not_found": "⚠️ Telegram ID {telegram_id} uchun profil topilmadi.",
         "error_retrieving_debt": "⚠️ Qarz ma'lumotlarini olishda xatolik yuz berdi: {error_message}",
-           "price_list": "Narxlar ro'yxati:\n{price_list_details}",
+        "price_list": "Narxlar ro'yxati:\n{price_list_details}",
         "per_package": "paket uchun",
         "per_meter": "metr uchun",
         "per_accessory_pack": "aksessuarlar paket uchun",
         "error_retrieving_price_list": "Narxlar ro'yxatini olishda xatolik: {error_message}",
-          "contact_number": "Aloqa raqami",
+        "contact_number": "Aloqa raqami",
         "additional_contact_number": "Qo'shimcha aloqa raqami",
         "email": "Elektron pochta",
         "telegram_username": "Telegram foydalanuvchi nomi",
@@ -29,33 +28,30 @@ translations = {
         "address": "Manzil",
         "latitude": "Kenglik",
         "longitude": "Uzunlik",
-        "write_question": "Iltimos, savolingizni yozing."
-
+        "write_question": "Iltimos, savolingizni yozing.",
     },
     "ru": {
         "order_form": "🛒 Заказать плинтус",
-"debts": "💳 Долги",
-"contacts": "📞 Контакты",
-"location": "📍 Местоположение",
-"support": "💬 Поддержка",
-"price": "💵 Цена",
-"see_profile": "👤 Посмотреть профиль",
-"change_language": "🌐 Изменить язык",
-"logout": "🚪 Выход",
-
-        "debt_overview": 
-    "💰 <b>@{username} для обзора задолженности</b>:\n"
-    "📌 <b>Всего взято в долг:</b> ${total_borrowed:,.2f}\n"
-    "✅ <b>Всего выплачено:</b> ${total_paid:,.2f}\n"
-    "❗ <b>Остаток долга:</b> ${remaining_balance:,.2f}\n",
+        "debts": "💳 “взаиморасчеты”",
+        "contacts": "📞 Контакты",
+        "location": "📍 Местоположение",
+        "support": "💬 Поддержка",
+        "price": "💵 Цена",
+        "see_profile": "👤 Посмотреть профиль",
+        "change_language": "🌐 Изменить язык",
+        "logout": "🚪 Выход",
+        "debt_overview": "💰 <b>@{username} для обзора задолженности</b>:\n"
+        "📌 <b>Всего взято в долг:</b> ${total_borrowed:,.2f}\n"
+        "✅ <b>Всего выплачено:</b> ${total_paid:,.2f}\n"
+        "❗ <b>Остаток долга:</b> ${remaining_balance:,.2f}\n",
         "profile_not_found": "⚠️ Профиль с Telegram ID {telegram_id} не найден.",
         "error_retrieving_debt": "⚠️ Ошибка при получении информации о долге: {error_message}",
-          "price_list": "Список цен:\n{price_list_details}",
+        "price_list": "Список цен:\n{price_list_details}",
         "per_package": "за упаковку",
         "per_meter": "за метр",
         "per_accessory_pack": "за комплект аксессуаров",
         "error_retrieving_price_list": "Ошибка при получении списка цен: {error_message}",
-          "contact_number": "Контактный номер",
+        "contact_number": "Контактный номер",
         "additional_contact_number": "Дополнительный контактный номер",
         "email": "Электронная почта",
         "telegram_username": "Телеграм-имя",
@@ -63,26 +59,23 @@ translations = {
         "address": "Адрес",
         "latitude": "Широта",
         "longitude": "Долгота",
-
-        "write_question": "Пожалуйста, напишите ваш вопрос."
-
-  
+        "write_question": "Пожалуйста, напишите ваш вопрос.",
     },
     "standart": {
         "order_form": "🛒 Plintus buyurtma berish",
-"debts": "💳 Qarzdorliklar",
-"support": "💬 Qo'llab-quvvatlash",
-"see_profile": "👤 Profilni ko'rish",
-"change_language": "🌐 Tilni o'zgartirish",
-"contacts": "Kontaktlar / Контакты",
-"price": "💵 Narx / Цена",
-"login": "🔑 Kirish / Вход",
-      "price_list": "Список цен / Narxlar ro'yxati:\n{price_list_details}",
+        "debts": "💳 Qarzdorliklar",
+        "support": "💬 Qo'llab-quvvatlash",
+        "see_profile": "👤 Profilni ko'rish",
+        "change_language": "🌐 Tilni o'zgartirish",
+        "contacts": "Kontaktlar / Контакты",
+        "price": "💵 Narx / Цена",
+        "login": "🔑 Kirish / Вход",
+        "price_list": "Список цен / Narxlar ro'yxati:\n{price_list_details}",
         "per_package": "за упаковку / paket uchun",
         "per_meter": "за метр / metr uchun",
         "per_accessory_pack": "за комплект аксессуаров / aksessuarlar paket uchun",
         "error_retrieving_price_list": "Ошибка при получении списка цен / Narxlar ro'yxatini olishda xatolik: {error_message}",
-    "contact_number": "Aloqa raqami / Контактный номер",
+        "contact_number": "Aloqa raqami / Контактный номер",
         "additional_contact_number": "Qo'shimcha aloqa raqami / Дополнительный контактный номер",
         "email": "Elektron pochta / Электронная почта",
         "telegram_username": "Telegram Foydalanuvchi nomi / Telegram Имя пользователя",
@@ -91,7 +84,6 @@ translations = {
         "latitude": "Kenglik / Широта",
         "longitude": "Uzunlik / Долгота",
         "logout": "Chiqish / Выход",
-        "write_question": "Iltimos, savolingizni yozing. / Пожалуйста, напишите ваш вопрос."
-}
-
+        "write_question": "Iltimos, savolingizni yozing. / Пожалуйста, напишите ваш вопрос.",
+    },
 }
